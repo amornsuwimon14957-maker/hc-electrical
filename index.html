@@ -1,1324 +1,683 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HC Electrical - Engineering Tools</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบคำนวณงานวิศวกรรมไฟฟ้าแบบครบวงจร (6 in 1 Electrical Tools)</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #28a745;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #cccccc;
+        }
+
+        body {
+            font-family: 'Sarabun', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        /* Nav Tabs Grid Layout for 6 Tabs */
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .tab-button {
+            padding: 10px 12px;
+            cursor: pointer;
+            background-color: #e9ecef;
+            border: 1px solid var(--border-color);
+            outline: none;
+            font-size: 13px;
+            font-weight: bold;
+            color: #495057;
+            border-radius: 5px 5px 0 0;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .tab-button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"], input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        button.btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button.btn:hover {
+            opacity: 0.9;
+        }
+
+        button.btn-add {
+            background-color: var(--secondary-color);
+            margin-top: 10px;
+        }
+
+        button.btn-danger {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        table, th, td {
+            border: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f8f9fa;
+        }
+
+        /* Results Box */
+        .result-box {
+            background-color: #e9f5ff;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .result-box h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .result-item {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #d9534f;
+            font-size: 1.1em;
+        }
+    </style>
 </head>
-<body class="min-h-screen text-slate-100 flex items-center justify-center p-4 relative overflow-x-hidden bg-slate-950">
+<body>
 
-  <!-- Background Image & Overlay -->
-  <div class="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10" style="background-image: url('https://wsrv.nl/?url=https://img2.pic.in.th/images-2b75e5d88945caa41.jpg');"></div>
-  <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-[2px] -z-10"></div>
+<div class="container">
+    <h1>ระบบคำนวณงานวิศวกรรมไฟฟ้า (6 in 1 Suite)</h1>
 
-  <!-- Credits (Top Right) -->
-  <div class="fixed top-3 right-3 text-right z-50 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/60 shadow-lg">
-    <div class="text-[10px] text-slate-300 font-medium">By : Amorn Amornkul</div>
-    <div class="text-[9px] text-emerald-400 font-semibold">HC Electrical</div>
-  </div>
-
-  <!-- MAIN CONTAINER -->
-  <div class="max-w-md w-full space-y-4 my-8">
-
-    <!-- Header Section / Logo -->
-    <div class="bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-2xl text-center space-y-2">
-      <div class="inline-block p-1.5 bg-slate-950/80 rounded-2xl border border-slate-800 shadow-inner">
-        <img 
-          src="https://i.ibb.co/Y4W8d4bB/hc-electrical-logo.png" 
-          alt="HC Electrical Logo" 
-          class="w-40 h-auto mx-auto rounded-xl shadow-md cursor-pointer"
-          onclick="showPage('home')"
-        />
-      </div>
-      <div>
-        <h1 class="text-sm font-bold text-slate-100 flex items-center justify-center gap-1.5">
-          <span class="text-emerald-400 font-extrabold">HC</span> Electrical Tools
-        </h1>
-        <p class="text-[11px] text-slate-300 mt-0.5">
-          เครื่องมือคำนวณทางวิศวกรรมไฟฟ้า (ฝ่ายซ่อมบำรุง)
-        </p>
-      </div>
+    <!-- แถบเมนูเลือก 6 โปรแกรม -->
+    <div class="tabs">
+        <button class="tab-button active" onclick="switchTab(event, 'tab-gen')">1. ขนาดเครื่องปั่นไฟ</button>
+        <button class="tab-button" onclick="switchTab(event, 'tab-vd')">2. คำนวณแรงดันตก (VD)</button>
+        <button class="tab-button" onclick="switchTab(event, 'tab-conv')">3. แปลงหน่วย (W/HP/kVA)</button>
+        <button class="tab-button" onclick="switchTab(event, 'tab-breaker')">4. ขนาดเบรกเกอร์/สายไฟ</button>
+        <button class="tab-button" onclick="switchTab(event, 'tab-cap')">5. ขนาด Capacitor Bank</button>
+        <button class="tab-button" onclick="switchTab(event, 'tab-bill')">6. ประเมินค่าไฟฟ้า (PEA/MEA)</button>
     </div>
 
-    <!-- PAGE 1: HOME SELECTION -->
-    <div id="pageHome" class="space-y-3">
-      <div class="text-center text-xs font-semibold text-slate-300 mb-1">
-        กรุณาเลือกโปรแกรมที่ต้องการใช้งาน
-      </div>
-
-      <!-- Card 1: Cable & CB Sizing -->
-      <button 
-        onclick="showPage('sizing')" 
-        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-blue-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
-      >
-        <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
-          ⚡
+    <!-- ==========================================
+         PROG 1: คำนวณเครื่องปั่นไฟ (เพิ่มใหม่ + คิดระยะสาย)
+         ========================================== -->
+    <div id="tab-gen" class="tab-content active">
+        <h2>1. โปรแกรมคำนวณขนาดเครื่องปั่นไฟ (Generator Sizing)</h2>
+        <b style="font-size: 1.05em;">1.1 เพิ่มรายการโหลดไฟฟ้าในระบบ</b>
+        <div class="grid-3" style="margin-top: 10px;">
+            <div class="form-group">
+                <label>ชื่ออุปกรณ์:</label>
+                <input type="text" id="gen-name" placeholder="เช่น แอร์, ปั๊มน้ำ, หลอดไฟ">
+            </div>
+            <div class="form-group">
+                <label>ขนาดกำลังไฟฟ้า:</label>
+                <input type="number" id="gen-val" placeholder="ระบุตัวเลข" value="1">
+            </div>
+            <div class="form-group">
+                <label>หน่วย:</label>
+                <select id="gen-unit">
+                    <option value="W">วัตต์ (W)</option>
+                    <option value="KW">กิโลวัตต์ (kW)</option>
+                    <option value="HP">แรงม้า (HP)</option>
+                </select>
+            </div>
         </div>
-        <div>
-          <h2 class="text-sm font-bold text-white group-hover:text-blue-400 transition">
-            คำนวณขนาดสายไฟ & เบรกเกอร์
-          </h2>
-          <p class="text-[11px] text-slate-400 mt-0.5">
-            คำนวณกระแสโหลด เลือกขนาดเบรกเกอร์ (CB) และขนาดสายไฟตามมาตรฐาน วสท.
-          </p>
-        </div>
-      </button>
-
-      <!-- Card 2: Voltage Drop Calculation -->
-      <button 
-        onclick="showPage('vd')" 
-        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-amber-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
-      >
-        <div class="w-12 h-12 rounded-xl bg-amber-600/20 border border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
-          📉
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-white group-hover:text-amber-400 transition">
-            คำนวณ แรงดันตก (Voltage Drop)
-          </h2>
-          <p class="text-[11px] text-slate-400 mt-0.5">
-            เช็กเปอร์เซ็นต์แรงดันตก (% VD) ตามระยะทางเดินสายไฟ ป้องกันอุปกรณ์เสียหาย
-          </p>
-        </div>
-      </button>
-
-      <!-- Card 3: Lighting Calculation -->
-      <button 
-        onclick="showPage('light')" 
-        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-yellow-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
-      >
-        <div class="w-12 h-12 rounded-xl bg-yellow-600/20 border border-yellow-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
-          💡
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-white group-hover:text-yellow-400 transition">
-            คำนวณระบบแสงสว่าง (Lighting)
-          </h2>
-          <p class="text-[11px] text-slate-400 mt-0.5">
-            หาจำนวนโคม/ความสว่าง (Lux) วิเคราะห์ Zebra Effect & สัดส่วนระยะติดตั้ง
-          </p>
-        </div>
-      </button>
-
-      <!-- Card 4: PEA Home Electricity Bill Calculator -->
-      <button 
-        onclick="showPage('pea')" 
-        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-purple-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
-      >
-        <div class="w-12 h-12 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
-          🏠
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-white group-hover:text-purple-400 transition">
-            คำนวณค่าไฟฟ้าบ้านอยู่อาศัย (PEA)
-          </h2>
-          <p class="text-[11px] text-slate-400 mt-0.5">
-            คำนวณค่าไฟฟ้าฐาน อัตราก้าวหน้าแยกตามช่วงหน่วย พร้อม VAT 7%
-          </p>
-        </div>
-      </button>
-
-      <!-- Card 5: Air Conditioner BTU Calculator (ส่วนที่เพิ่มใหม่) -->
-      <button 
-        onclick="showPage('ac')" 
-        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-cyan-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
-      >
-        <div class="w-12 h-12 rounded-xl bg-cyan-600/20 border border-cyan-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
-          ❄️
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-white group-hover:text-cyan-400 transition">
-            คำนวณขนาดเครื่องปรับอากาศ (BTU)
-          </h2>
-          <p class="text-[11px] text-slate-400 mt-0.5">
-            คำนวณ BTU ตามพื้นที่/ชนิดห้อง/ทิศทางแดด พร้อมแนะนำการแบ่งติดแอร์ 2-3 เครื่อง
-          </p>
-        </div>
-      </button>
-    </div>
-
-    <!-- PAGE 2: CABLE & CB SIZING CALCULATOR -->
-    <div id="pageSizing" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
-          ←กลับหน้าหลัก
-        </button>
-        <span class="text-xs font-semibold text-blue-400">⚡ Cable & CB Sizing</span>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
-        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
-          <span class="flex items-center gap-2"><span class="text-yellow-400">⚡</span> ระบุข้อมูลโหลดไฟฟ้า</span>
-        </h2>
-        
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <button id="btnGeneral" type="button" onclick="setLoadType('general')" class="py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30">
-            โหลดทั่วไป / แสงสว่าง
-          </button>
-          <button id="btnMotor" type="button" onclick="setLoadType('motor')" class="py-2.5 rounded-lg font-medium transition bg-slate-800/80 text-slate-300 hover:text-white">
-            โหลดมอเตอร์ / แอร์
-          </button>
+        <div class="grid-3">
+            <div class="form-group">
+                <label>ประเภทโหลด:</label>
+                <select id="gen-type">
+                    <option value="resistive">ทั่วไป / ความร้อน / แสงสว่าง</option>
+                    <option value="inductive">มอเตอร์ / ปั๊มน้ำ / แอร์ (คิดเผื่อกระชาก)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>จำนวน:</label>
+                <input type="number" id="gen-qty" value="1" min="1">
+            </div>
+            <div class="form-group" style="align-self: flex-end;">
+                <button class="btn btn-add" style="width: 100%;" onclick="addGenLoad()">+ เพิ่มรายการ</button>
+            </div>
         </div>
 
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">กำลังไฟฟ้า / ขนาดโหลด:</label>
-          <div class="flex gap-2">
-            <input 
-              type="number" 
-              id="power" 
-              value="30" 
-              step="0.1"
-              oninput="calculateSizing()" 
-              class="flex-1 bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
-            />
-            <select 
-              id="powerUnit" 
-              onchange="calculateSizing()" 
-              class="bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 font-semibold"
-            >
-              <option value="kW">กิโลวัตต์ (kW)</option>
-              <option value="W">วัตต์ (W)</option>
-              <option value="HP">แรงม้า (HP)</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระบบไฟฟ้า (Phase):</label>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <button id="btnPhase1" type="button" onclick="setPhase('1')" class="py-2.5 rounded-lg transition bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-medium">
-              1 เฟส (220V)
-            </button>
-            <button id="btnPhase3" type="button" onclick="setPhase('3')" class="py-2.5 rounded-lg transition bg-slate-800/80 text-slate-300 hover:text-white font-medium">
-              3 เฟส (380V)
-            </button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ชนิดสายไฟ:</label>
-            <select id="wireType" onchange="updateOptions()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
-              <option value="THW">THW (IEC 01)</option>
-              <option value="NYY">NYY</option>
-              <option value="VAF">VAF</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">จำนวนแกน:</label>
-            <select id="wireCores" onchange="calculateSizing()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
-              <option value="1">1 แกน (Single-Core)</option>
-              <option value="2">2 แกน (2-Core)</option>
-              <option value="3">3 แกน (3-Core)</option>
-              <option value="4">4 แกน (4-Core)</option>
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">วิธีการเดินสาย:</label>
-          <select id="installMethod" onchange="calculateSizing()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
-            <option value="conduit">เดินในท่อร้อยสาย (Conduit)</option>
-            <option value="air">เดินลอยในอากาศ / เกาะผนัง</option>
-            <option value="underground">เดินฝังดินโดยตรง (Direct Buried)</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">Power Factor (PF):</label>
-          <input 
-            type="number" 
-            id="pf" 
-            value="0.85" 
-            step="0.01" 
-            oninput="calculateSizing()" 
-            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
-          />
-        </div>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
-        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณ (อ้างอิงมาตรฐาน วสท.)</div>
-        <div>
-          <div class="text-xs text-slate-400 mb-1">กระแสโหลดใช้งานจริง (I_load)</div>
-          <div id="iLoad" class="text-3xl font-extrabold text-blue-400">0 A</div>
-        </div>
-        <div class="pt-3 border-t border-slate-800">
-          <div class="text-xs text-slate-400 mb-1">ขนาด Main CB ที่แนะนำ (In)</div>
-          <div id="cbSize" class="text-3xl font-extrabold text-red-500">0 A</div>
-        </div>
-        <div class="pt-3 border-t border-slate-800">
-          <div class="text-xs text-slate-400 mb-1">ขนาดสายไฟแนะนำ (สายเดี่ยว)</div>
-          <div id="wireSize" class="text-2xl font-bold text-emerald-400">0 ตร.มม.</div>
-          <div class="mt-2 inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-            <span class="text-xs text-emerald-300">พิกัดทนกระแสสาย (Iz): </span>
-            <span id="wireCapacity" class="text-xs font-bold text-emerald-400">0 A</span>
-          </div>
-          <div id="wireDetail" class="text-xs text-slate-400 mt-2">-</div>
-        </div>
-        <div id="parallelBox" class="pt-3 border-t border-slate-800 hidden">
-          <div class="text-xs text-yellow-400 font-semibold mb-1 flex items-center justify-center gap-1">
-            <span>🔀</span> คำแนะนำทางเลือก: การเบิ้ลสาย (Parallel Runs)
-          </div>
-          <div id="parallelText" class="text-lg font-bold text-yellow-300 mt-1">2x (1x95 ตร.มม.)</div>
-          <div id="parallelCap" class="text-xs text-slate-300 mt-1">พิกัดทนกระแสรวม: 520 A</div>
-          <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">
-            *การเดินเบิ้ลสายช่วยลดความแข็งในการดัดโค้งและลดขนาดท่อร้อยสาย
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE 3: VOLTAGE DROP CALCULATOR -->
-    <div id="pageVD" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
-          ←กลับหน้าหลัก
-        </button>
-        <span class="text-xs font-semibold text-amber-400">📉 Voltage Drop Calculator</span>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
-        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
-          <span class="flex items-center gap-2"><span class="text-amber-400">📐</span> ข้อมูลแรงดันและระยะทาง</span>
-        </h2>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระบบไฟฟ้า (Phase):</label>
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <button id="btnVDPhase1" type="button" onclick="setVDPhase('1')" class="py-2.5 rounded-lg transition bg-amber-600 text-white shadow-lg shadow-amber-600/30 font-medium">
-              1 เฟส (220V)
-            </button>
-            <button id="btnVDPhase3" type="button" onclick="setVDPhase('3')" class="py-2.5 rounded-lg transition bg-slate-800/80 text-slate-300 hover:text-white font-medium">
-              3 เฟส (380V)
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">กระแสไฟฟ้าที่ใช้งานจริง (Amp):</label>
-          <input 
-            type="number" 
-            id="vdCurrent" 
-            value="50" 
-            step="0.5" 
-            oninput="calculateVD()" 
-            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition"
-          />
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ขนาดสายไฟ (Copper / ตร.มม.):</label>
-          <select id="vdWireSize" onchange="calculateVD()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-semibold">
-            <option value="1.5">1.5 ตร.มม.</option>
-            <option value="2.5">2.5 ตร.มม.</option>
-            <option value="4">4 ตร.มม.</option>
-            <option value="6">6 ตร.มม.</option>
-            <option value="10" selected>10 ตร.มม.</option>
-            <option value="16">16 ตร.มม.</option>
-            <option value="25">25 ตร.มม.</option>
-            <option value="35">35 ตร.มม.</option>
-            <option value="50">50 ตร.มม.</option>
-            <option value="70">70 ตร.มม.</option>
-            <option value="95">95 ตร.มม.</option>
-            <option value="120">120 ตร.มม.</option>
-            <option value="150">150 ตร.มม.</option>
-            <option value="185">185 ตร.มม.</option>
-            <option value="240">240 ตร.มม.</option>
-            <option value="300">300 ตร.มม.</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระยะทางเดินสายไฟ (เมตร):</label>
-          <input 
-            type="number" 
-            id="vdDistance" 
-            value="50" 
-            step="1" 
-            oninput="calculateVD()" 
-            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition"
-          />
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">Power Factor (PF):</label>
-          <input 
-            type="number" 
-            id="vdPf" 
-            value="0.85" 
-            step="0.01" 
-            oninput="calculateVD()" 
-            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition"
-          />
-        </div>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
-        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณ แรงดันตก (Voltage Drop)</div>
-        <div>
-          <div class="text-xs text-slate-400 mb-1">เปอร์เซ็นต์แรงดันตก (% Voltage Drop)</div>
-          <div id="vdPercentResult" class="text-4xl font-extrabold text-emerald-400">0.00 %</div>
-          <div id="vdStatusBadge" class="mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
-            อยู่ในเกณฑ์มาตรฐาน (≤ 3%)
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800 text-left">
-          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-            <div class="text-[10px] text-slate-400">แรงดันที่ลดลง (VD)</div>
-            <div id="vdVoltageDropVal" class="text-base font-bold text-amber-400">0.00 V</div>
-          </div>
-          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-            <div class="text-[10px] text-slate-400">แรงดันปลายทางเหลือ (V_end)</div>
-            <div id="vdEndVoltage" class="text-base font-bold text-blue-400">0.00 V</div>
-          </div>
-        </div>
-        <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
-          * มาตรฐาน วสท. แนะนำแรงดันตกไม่เกิน <strong>3%</strong> สำหรับวงจรย่อย และไม่เกิน <strong>5%</strong> สำหรับรวมสายป้อนและวงจรย่อย
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE 4: LIGHTING CALCULATOR -->
-    <div id="pageLight" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
-          ←กลับหน้าหลัก
-        </button>
-        <span class="text-xs font-semibold text-yellow-400">💡 Lighting Calculator</span>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-1.5 rounded-xl border border-slate-700/60 grid grid-cols-2 gap-1.5 text-xs shadow-xl">
-        <button id="btnModeCount" onclick="setCalcMode('count')" class="py-2 rounded-lg font-semibold transition bg-yellow-500 text-slate-950 shadow-md">
-          🎯 คำนวณหาจำนวนโคม (จาก Lux)
-        </button>
-        <button id="btnModeLux" onclick="setCalcMode('lux')" class="py-2 rounded-lg font-semibold transition bg-slate-800 text-slate-300 hover:text-white">
-          🔍 คำนวณหาค่า Lux (จากโคม)
-        </button>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
-        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
-          <span class="flex items-center gap-2"><span class="text-yellow-400">💡</span> ข้อมูลห้องและโคมไฟ</span>
-        </h2>
-
-        <div id="boxLuxTarget">
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ประเภทห้อง / ค่าความสว่างเป้าหมาย (Lux):</label>
-          <select id="lightRoomType" onchange="calculateLighting()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500 font-semibold">
-            <option value="100">คลังสินค้า / ลานจอดรถ / ทางเดินทั่วไป (100 Lux)</option>
-            <option value="150">ห้องเก็บของ / ห้องเครื่องจักร / บันได (150 Lux)</option>
-            <option value="200">โรงอาหาร / ห้องโถงรับรอง (200 Lux)</option>
-            <option value="300">ห้องนั่งเล่น / ร้านค้าทั่วไป / พื้นที่ประกอบงานหยาบ (300 Lux)</option>
-            <option value="350">ห้องประชุม / คลินิก (350 Lux)</option>
-            <option value="500" selected>สำนักงาน / ห้องทำงานทั่วไป / ห้องเรียน (500 Lux)</option>
-            <option value="750">ห้องเขียนแบบ / ห้องตรวจโรค / งานประกอบละเอียด (750 Lux)</option>
-            <option value="1000">ห้องผ่าตัด / งานตรวจสอบคุณภาพละเอียดสูง (1000 Lux)</option>
-          </select>
-        </div>
-
-        <div id="boxFixtureInput" class="hidden">
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">จำนวนโคมไฟที่ต้องการติดตั้ง (ชุด):</label>
-          <input 
-            type="number" 
-            id="inputFixtureQty" 
-            value="6" 
-            min="1"
-            oninput="calculateLighting()" 
-            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-yellow-400 font-bold focus:outline-none focus:border-yellow-500 transition"
-          />
-        </div>
-
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความกว้าง (m):</label>
-            <input 
-              type="number" 
-              id="lightWidth" 
-              value="4" 
-              step="0.5" 
-              oninput="calculateLighting()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-yellow-500 transition"
-            />
-          </div>
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความยาว (m):</label>
-            <input 
-              type="number" 
-              id="lightLength" 
-              value="6" 
-              step="0.5" 
-              oninput="calculateLighting()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-yellow-500 transition"
-            />
-          </div>
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความสูงติดตั้ง (m):</label>
-            <input 
-              type="number" 
-              id="lightHeight" 
-              value="2.8" 
-              step="0.1" 
-              oninput="calculateLighting()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-yellow-500 transition"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">เลือกชนิดโคมไฟ / หลอดไฟ (หลากหลาย):</label>
-          <select id="lightBulbPreset" onchange="applyBulbPreset()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
-            <optgroup label="🏢 โคมสำนักงาน & ฝ้าเพดาน (Commercial)">
-              <option value="panel" selected>LED Panel 60x60 cm (40W / 4,000 lm)</option>
-              <option value="panel_slim">LED Panel Slim 30x120 cm (36W / 3,600 lm)</option>
-              <option value="tube_double">โคมตะแกรง LED T8 2x18W (36W / 3,600 lm)</option>
-              <option value="tube_single">โคมรางเรียบ LED Tube T8 1x18W (18W / 1,800 lm)</option>
-              <option value="downlight_sq">LED Downlight ฝังฝ้า 6" (15W / 1,350 lm)</option>
-              <option value="downlight_sm">LED Downlight ฝังฝ้า 4" (12W / 1,000 lm)</option>
-            </optgroup>
-            <optgroup label="🏭 โคมอุตสาหกรรม & เพดานสูง (Industrial)">
-              <option value="highbay_hb">LED High Bay 150W (150W / 19,500 lm)</option>
-              <option value="highbay_sm">LED High Bay 100W (100W / 13,000 lm)</option>
-              <option value="floodlight">LED Floodlight สปอตไลท์ (50W / 5,500 lm)</option>
-              <option value="batten_tri">LED Tri-Proof กันน้ำกันฝุ่น (40W / 4,400 lm)</option>
-            </optgroup>
-            <optgroup label="🏠 โคมไฟบ้าน & งานตกแต่ง (Residential & Decor)">
-              <option value="bulb_e27">หลอด LED Bulb E27 (9W / 810 lm)</option>
-              <option value="bulb_high">หลอด LED High Watt E27 (20W / 2,000 lm)</option>
-              <option value="tracklight">LED Track Light โคมแทร็กไลท์ (15W / 1,200 lm)</option>
-            </optgroup>
-            <option value="custom">⚙️ กำหนดค่าเอง (Custom Lumens / Watts)</option>
-          </select>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความสว่างต่อชุด (Lumens):</label>
-            <input 
-              type="number" 
-              id="lightLumens" 
-              value="4000" 
-              step="100" 
-              oninput="calculateLighting()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
-            />
-          </div>
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">กำลังไฟต่อชุด (Watts):</label>
-            <input 
-              type="number" 
-              id="lightWatts" 
-              value="40" 
-              step="1" 
-              oninput="calculateLighting()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
-        <div class="text-xs text-slate-300 font-medium">📊 ผลการวิเคราะห์แสงสว่าง (Lumen Method & Spacing Ratio)</div>
-
-        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-          <div id="lblMainResult" class="text-xs text-slate-400 mb-1">จำนวนโคมไฟที่แนะนำ</div>
-          <div id="valMainResult" class="text-4xl font-extrabold text-yellow-400">0 ชุด</div>
-          <div id="lightGridLayout" class="text-xs text-slate-300 mt-1 font-semibold">การจัดวาง: -</div>
-        </div>
-
-        <div id="zebraCard" class="p-3.5 rounded-xl border text-left transition-all">
-          <div class="flex items-center gap-2 font-bold text-xs">
-            <span id="zebraIcon" class="text-base">⚠️</span>
-            <span id="zebraTitle">วิเคราะห์ Zebra Effect (แสงด่างเป็นลายนัยน์ตาเสือ)</span>
-          </div>
-          <div id="zebraDesc" class="text-[11px] mt-1.5 leading-relaxed">
-            -
-          </div>
-          <div class="mt-2 text-[10px] grid grid-cols-2 gap-2 opacity-90 border-t border-slate-700/40 pt-1.5">
-            <div>ระยะห่างระหว่างโคม (S): <span id="valSpacing" class="font-bold">0.0 m</span></div>
-            <div>ระยะห่างสัดส่วน (S/H): <span id="valSHRatio" class="font-bold">0.0</span></div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 text-left">
-          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-            <div class="text-[10px] text-slate-400">พื้นที่ห้องรวม</div>
-            <div id="lightArea" class="text-base font-bold text-blue-400">0.00 ตร.ม.</div>
-          </div>
-          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-            <div class="text-[10px] text-slate-400">กำลังไฟฟ้ารวม</div>
-            <div id="lightTotalWatts" class="text-base font-bold text-emerald-400">0 W</div>
-          </div>
-        </div>
-
-        <div class="pt-3 border-t border-slate-800 text-left space-y-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-slate-400">ค่าความสว่างที่ได้จริง (Actual Lux):</span>
-            <span id="lightActualLux" class="font-bold text-white">0 Lux</span>
-          </div>
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-slate-400">ความหนาแน่นพลังงาน (LPD):</span>
-            <span id="lightLPD" class="font-bold text-yellow-300">0 W/ตร.ม.</span>
-          </div>
-        </div>
-
-        <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
-          * เกณฑ์ Spacing-to-Height Ratio (S/H ≤ 1.2) ป้องกันเงามืดสนิทและรอยต่อแสง (Zebra Effect) ตามมาตรฐานวิศวกรรมสว่าง
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE 5: PEA HOME ELECTRICITY BILL CALCULATOR -->
-    <div id="pagePEA" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
-          ←กลับหน้าหลัก
-        </button>
-        <span class="text-xs font-semibold text-purple-400">🏠 PEA Home Bill Calculator</span>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
-        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
-          <span class="flex items-center gap-2"><span class="text-purple-400">🏠</span> คำนวณค่าไฟฟ้าบ้านอยู่อาศัย (PEA)</span>
-        </h2>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ประเภทผู้ใช้ไฟฟ้า:</label>
-          <select id="peaUserType" onchange="calculatePEABill()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-semibold">
-            <option value="1.1.1">1.1.1 บ้านอยู่อาศัย (เดิมใช้ไม่เกิน 150 หน่วย/เดือน)</option>
-            <option value="1.1.2" selected>1.1.2 บ้านอยู่อาศัย (เดิมใช้เกิน 150 หน่วย/เดือน)</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">จำนวนหน่วยไฟฟ้าที่ใช้ (หน่วย / kWh):</label>
-          <input 
-            type="number" 
-            id="peaUnits" 
-            value="350" 
-            min="0"
-            oninput="calculatePEABill()" 
-            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-purple-300 font-bold focus:outline-none focus:border-purple-500 transition"
-          />
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ค่าบริการรายเดือน (บาท):</label>
-            <input 
-              type="number" 
-              id="peaServiceFee" 
-              value="38.22" 
-              step="0.01"
-              oninput="calculatePEABill()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500"
-            />
-          </div>
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ค่า Ft (บาท/หน่วย):</label>
-            <input 
-              type="number" 
-              id="peaFtRate" 
-              value="0.3972" 
-              step="0.0001"
-              oninput="calculatePEABill()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
-        <div class="text-xs text-slate-300 font-medium">📊 สรุปยอดประมาณการค่าไฟฟ้าสุทธิ</div>
-
-        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-          <div class="text-xs text-slate-400 mb-1">ยอดรวมค่าไฟฟ้าทั้งสิ้น (รวม VAT 7%)</div>
-          <div id="peaNetTotal" class="text-4xl font-extrabold text-purple-400">0.00 บาท</div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 text-left text-xs">
-          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">ค่าไฟฟ้าฐาน:</span>
-            <span id="peaBaseCost" class="font-bold text-white">0.00 บาท</span>
-          </div>
-          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">ค่า Ft รวม:</span>
-            <span id="peaFtTotal" class="font-bold text-yellow-400">0.00 บาท</span>
-          </div>
-          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">ค่าบริการ:</span>
-            <span id="peaServiceFeeVal" class="font-bold text-slate-300">0.00 บาท</span>
-          </div>
-          <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">ภาษี VAT (7%):</span>
-            <span id="peaVat" class="font-bold text-emerald-400">0.00 บาท</span>
-          </div>
-        </div>
-
-        <div class="pt-2 text-left">
-          <div class="text-[11px] font-semibold text-slate-300 mb-2">รายละเอียดการคำนวณตามช่วงหน่วย (อัตราก้าวหน้า)</div>
-          <div class="overflow-x-auto rounded-xl border border-slate-800">
-            <table class="w-full text-[11px] text-left border-collapse">
-              <thead>
-                <tr class="bg-slate-950 text-slate-400 border-b border-slate-800">
-                  <th class="p-2">ช่วงหน่วย</th>
-                  <th class="p-2 text-right">จำนวน</th>
-                  <th class="p-2 text-right">อัตรา</th>
-                  <th class="p-2 text-right">จำนวนเงิน</th>
+        <table>
+            <thead>
+                <tr>
+                    <th>อุปกรณ์</th>
+                    <th>ขนาด/หน่วย</th>
+                    <th>ประเภท</th>
+                    <th>จำนวน</th>
+                    <th>kW รวม</th>
+                    <th>จัดการ</th>
                 </tr>
-              </thead>
-              <tbody id="peaBreakdownBody" class="divide-y divide-slate-800/60 bg-slate-950/40 text-slate-200">
-              </tbody>
-            </table>
-          </div>
+            </thead>
+            <tbody id="gen-table-body"></tbody>
+        </table>
+
+        <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+        <b style="font-size: 1.05em;">1.2 ข้อมูลระบบไฟฟ้า & ระยะทางสายไฟ</b>
+        <div class="grid-3" style="margin-top: 10px;">
+            <div class="form-group">
+                <label>ระบบไฟฟ้าเครื่องปั่นไฟ:</label>
+                <select id="gen-phase">
+                    <option value="1">1 เฟส (220V)</option>
+                    <option value="3" selected>3 เฟส (380V)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>ระยะทางสายไฟ (เมตร):</label>
+                <input type="number" id="gen-dist" value="50" min="0">
+            </div>
+            <div class="form-group">
+                <label>ขนาดสายไฟ (ตร.มม.):</label>
+                <select id="gen-wiresize">
+                    <option value="4">4 sq.mm</option>
+                    <option value="6">6 sq.mm</option>
+                    <option value="10">10 sq.mm</option>
+                    <option value="16" selected>16 sq.mm</option>
+                    <option value="25">25 sq.mm</option>
+                    <option value="35">35 sq.mm</option>
+                    <option value="50">50 sq.mm</option>
+                    <option value="70">70 sq.mm</option>
+                </select>
+            </div>
         </div>
 
-        <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
-          * การคำนวณเป็นการประมาณการค่าไฟฟ้าฐาน + ค่าบริการ + ค่า Ft + VAT 7% ตามโครงสร้างอัตราค่าไฟฟ้าของการไฟฟ้าส่วนภูมิภาค (PEA)
+        <button class="btn" style="width: 100%; margin-top: 10px;" onclick="calcGenerator()">คำนวณขนาดเครื่องปั่นไฟ</button>
+
+        <div id="gen-res-box" class="result-box" style="display:none;">
+            <h3>ผลการคำนวณขนาด Generator</h3>
+            <div class="result-item" id="gen-res-running">กำลังไฟฟ้ารวมปกติ: - kW</div>
+            <div class="result-item" id="gen-res-starting">กำลังไฟฟ้ารวมช่วงสตาร์ท: - kW</div>
+            <div class="result-item" id="gen-res-vd">แรงดันตกในสายส่ง: - V (- %)</div>
+            <hr style="border:0; border-top:1px dashed #ccc;">
+            <div class="result-item">ขนาด Generator ที่แนะนำ (kVA): <span class="highlight" id="gen-res-kva">- kVA</span></div>
+            <div class="result-item">ขนาด Generator ที่แนะนำ (kW): <span class="highlight" id="gen-res-kw">- kW</span> (เผื่อ Safety Factor 20-25%)</div>
         </div>
-      </div>
     </div>
 
-    <!-- PAGE 6: AIR CONDITIONER BTU CALCULATOR (ส่วนที่เพิ่มใหม่) -->
-    <div id="pageAC" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
-          ←กลับหน้าหลัก
-        </button>
-        <span class="text-xs font-semibold text-cyan-400">❄️ Air Conditioner Calculator</span>
-      </div>
-
-      <!-- Input Card -->
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
-        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
-          <span class="flex items-center gap-2"><span class="text-cyan-400">❄️</span> ข้อมูลห้องและสภาพการใช้งาน</span>
-        </h2>
-
-        <!-- Dimensions -->
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความกว้าง (m):</label>
-            <input 
-              type="number" 
-              id="acWidth" 
-              value="4" 
-              step="0.5" 
-              oninput="calculateAC()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
-            />
-          </div>
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความยาว (m):</label>
-            <input 
-              type="number" 
-              id="acLength" 
-              value="5" 
-              step="0.5" 
-              oninput="calculateAC()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
-            />
-          </div>
-          <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">เพดานสูง (m):</label>
-            <input 
-              type="number" 
-              id="acHeight" 
-              value="2.5" 
-              step="0.1" 
-              oninput="calculateAC()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-cyan-500 transition"
-            />
-          </div>
+    <!-- ==========================================
+         PROG 2: คำนวณแรงดันตก (Voltage Drop)
+         ========================================== -->
+    <div id="tab-vd" class="tab-content">
+        <h2>2. โปรแกรมคำนวณแรงดันตกในสายไฟ (Voltage Drop Calculator)</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>ระบบไฟฟ้า:</label>
+                <select id="vd-phase">
+                    <option value="1">1 Phase 220V</option>
+                    <option value="3">3 Phase 380V</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>กระแสไฟฟ้าโหลด (แอมป์ - A):</label>
+                <input type="number" id="vd-current" value="30">
+            </div>
+            <div class="form-group">
+                <label>ระยะทางสายไฟ (เมตร):</label>
+                <input type="number" id="vd-dist" value="100">
+            </div>
+            <div class="form-group">
+                <label>ขนาดสายไฟ (ตร.มม.):</label>
+                <select id="vd-wiresize">
+                    <option value="2.5">2.5 sq.mm</option>
+                    <option value="4">4 sq.mm</option>
+                    <option value="6">6 sq.mm</option>
+                    <option value="10" selected>10 sq.mm</option>
+                    <option value="16">16 sq.mm</option>
+                    <option value="25">25 sq.mm</option>
+                    <option value="35">35 sq.mm</option>
+                    <option value="50">50 sq.mm</option>
+                </select>
+            </div>
         </div>
+        <button class="btn" onclick="calcVD()">คำนวณแรงดันตก</button>
 
-        <!-- Room Type -->
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ประเภท/ลักษณะการใช้งานห้อง:</label>
-          <select id="acRoomType" onchange="calculateAC()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 font-semibold">
-            <option value="600" selected>ห้องนอน / ห้องพักผ่อน (ภาระความร้อนต่ำ - 600 BTU/ตร.ม.)</option>
-            <option value="700">ห้องนั่งเล่น / ห้องรับแขก (ภาระความร้อนปานกลาง - 700 BTU/ตร.ม.)</option>
-            <option value="800">สำนักงาน / ห้องทำงาน (มีคนและคอมพิวเตอร์ - 800 BTU/ตร.ม.)</option>
-            <option value="900">ร้านค้า / ร้านกาแฟ / ห้องประชุม (คนเข้า-ออกบ่อย - 900 BTU/ตร.ม.)</option>
-            <option value="1000">ร้านอาหาร / ฟิตเนส / ร้านทำผม (ความร้อนและคนแน่น - 1000 BTU/ตร.ม.)</option>
-          </select>
+        <div id="vd-res-box" class="result-box" style="display:none;">
+            <h3>ผลการคำนวณแรงดันตก</h3>
+            <div class="result-item" id="vd-res-v">แรงดันตก: - V</div>
+            <div class="result-item" id="vd-res-pct">แรงดันตกร้อยละ: - %</div>
+            <div class="result-item" id="vd-res-status">สถานะ: -</div>
         </div>
-
-        <!-- Usage Time & Sun Exposure -->
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ช่วงเวลาใช้งาน & ทิศทางแสงแดด:</label>
-          <select id="acSunType" onchange="calculateAC()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 font-semibold">
-            <option value="1.0" selected>ใช้งานกลางคืนเป็นหลัก / ไม่โดนแดดจัด (ตัวคูณ 1.0)</option>
-            <option value="1.15">ใช้งานกลางวัน / โดนแดดปานกลาง (ตัวคูณ 1.15)</option>
-            <option value="1.30">ใช้งานกลางวัน / ทิศตะวันตก-ใต้ โดนแดดจัด / หลังคากระจก (ตัวคูณ 1.30)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Result Card -->
-      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
-        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณขนาดเครื่องปรับอากาศที่เหมาะสม</div>
-
-        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
-          <div class="text-xs text-slate-400 mb-1">ขนาด BTU แนะนำรวม (Recommended Total BTU)</div>
-          <div id="acTotalBTU" class="text-4xl font-extrabold text-cyan-400">0 BTU</div>
-          <div id="acStdModel" class="text-xs text-emerald-400 mt-1 font-semibold">รุ่นมาตรฐานที่แนะนำ: -</div>
-        </div>
-
-        <!-- Multi-split Recommendation Box -->
-        <div id="acSplitBox" class="p-3.5 rounded-xl border border-cyan-500/40 bg-cyan-950/30 text-left space-y-2 hidden">
-          <div class="flex items-center gap-2 font-bold text-xs text-cyan-300">
-            <span>🔀</span>
-            <span>คำแนะนำ: การแยกติดตั้งเครื่องปรับอากาศ (Multi-Split System)</span>
-          </div>
-          <div class="text-[11px] text-slate-300 leading-relaxed">
-            ห้องขนาดใหญ่หรือต้องการ BTU สูง แนะนำให้แบ่งติดตั้งแอร์ 2-3 เครื่อง เพื่อกระจายลมเย็นได้ทั่วถึง และสามารถเปิดใช้งานแยกเครื่องเมื่อใช้งานบางส่วนเพื่อประหยัดไฟ
-          </div>
-          <div id="acSplitDetails" class="space-y-1.5 pt-1 text-xs">
-            <!-- Dynamic Split Options -->
-          </div>
-        </div>
-
-        <!-- Secondary Info Grid -->
-        <div class="grid grid-cols-2 gap-3 text-left">
-          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-            <div class="text-[10px] text-slate-400">พื้นที่ห้อง (Area)</div>
-            <div id="acArea" class="text-base font-bold text-blue-400">0.00 ตร.ม.</div>
-          </div>
-          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-            <div class="text-[10px] text-slate-400">ปริมาตรห้อง (Volume)</div>
-            <div id="acVolume" class="text-base font-bold text-amber-400">0.00 ลบ.ม.</div>
-          </div>
-        </div>
-
-        <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
-          * การคำนวณนำปัจจัยความสูงเพดานเกินมาตรฐาน (เกิน 2.5m) มาร่วมคิดภาระความร้อน และปรับขนาด BTU เพิ่ม 10-15% เข้าหารุ่นที่มีจำหน่ายจริงในท้องตลาด
-        </div>
-      </div>
     </div>
 
-    <div class="text-center text-[10px] text-slate-400 drop-shadow pt-2">
-      HICRETE Electrical Division Tool
+    <!-- ==========================================
+         PROG 3: แปลงหน่วยกำลังไฟฟ้า (Unit Converter)
+         ========================================== -->
+    <div id="tab-conv" class="tab-content">
+        <h2>3. โปรแกรมแปลงหน่วยกำลังไฟฟ้า (W / kW / HP / kVA)</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>ค่าที่ต้องการแปลง:</label>
+                <input type="number" id="conv-val" value="10">
+            </div>
+            <div class="form-group">
+                <label>จากหน่วย:</label>
+                <select id="conv-from">
+                    <option value="HP">แรงม้า (HP)</option>
+                    <option value="KW">กิโลวัตต์ (kW)</option>
+                    <option value="W">วัตต์ (W)</option>
+                    <option value="KVA">เควีเอ (kVA - @PF 0.8)</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn" onclick="calcConv()">แปลงหน่วย</button>
+
+        <div id="conv-res-box" class="result-box" style="display:none;">
+            <h3>ผลการแปลงหน่วย</h3>
+            <div class="result-item" id="conv-res-w">วัตต์ (W): -</div>
+            <div class="result-item" id="conv-res-kw">กิโลวัตต์ (kW): -</div>
+            <div class="result-item" id="conv-res-hp">แรงม้า (HP): -</div>
+            <div class="result-item" id="conv-res-kva">kVA (PF 0.8): -</div>
+        </div>
     </div>
 
-  </div>
+    <!-- ==========================================
+         PROG 4: คำนวณเบรกเกอร์และขนาดสายไฟ
+         ========================================== -->
+    <div id="tab-breaker" class="tab-content">
+        <h2>4. โปรแกรมคำนวณขนาดเบรกเกอร์และสายไฟ (Breaker & Wire Sizing)</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>ระบบไฟฟ้า:</label>
+                <select id="brk-phase">
+                    <option value="1">1 เฟส 220V</option>
+                    <option value="3">3 เฟส 380V</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>โหลดไฟฟ้ารวม (kW):</label>
+                <input type="number" id="brk-kw" value="5">
+            </div>
+        </div>
+        <button class="btn" onclick="calcBreaker()">คำนวณเบรกเกอร์/สายไฟ</button>
 
-  <script>
-    // PAGE ROUTING LOGIC
-    function showPage(pageId) {
-      document.getElementById('pageHome').classList.add('hidden');
-      document.getElementById('pageSizing').classList.add('hidden');
-      document.getElementById('pageVD').classList.add('hidden');
-      document.getElementById('pageLight').classList.add('hidden');
-      document.getElementById('pagePEA').classList.add('hidden');
-      document.getElementById('pageAC').classList.add('hidden');
+        <div id="brk-res-box" class="result-box" style="display:none;">
+            <h3>ขนาดที่แนะนำตามมาตรฐาน</h3>
+            <div class="result-item" id="brk-res-current">กระแสโหลดคำนวณ (Full Load Current): - A</div>
+            <div class="result-item" id="brk-res-size">ขนาดเมนเบรกเกอร์ที่แนะนำ (AT): <span class="highlight" id="brk-val-at">- A</span></div>
+            <div class="result-item" id="brk-res-wire">ขนาดสายไฟ THW ขั้นต่ำ: <span class="highlight" id="brk-val-wire">- sq.mm</span></div>
+        </div>
+    </div>
 
-      if (pageId === 'home') {
-        document.getElementById('pageHome').classList.remove('hidden');
-      } else if (pageId === 'sizing') {
-        document.getElementById('pageSizing').classList.remove('hidden');
-        calculateSizing();
-      } else if (pageId === 'vd') {
-        document.getElementById('pageVD').classList.remove('hidden');
-        calculateVD();
-      } else if (pageId === 'light') {
-        document.getElementById('pageLight').classList.remove('hidden');
-        calculateLighting();
-      } else if (pageId === 'pea') {
-        document.getElementById('pagePEA').classList.remove('hidden');
-        calculatePEABill();
-      } else if (pageId === 'ac') {
-        document.getElementById('pageAC').classList.remove('hidden');
-        calculateAC();
-      }
+    <!-- ==========================================
+         PROG 5: คำนวณ Capacitor Bank
+         ========================================== -->
+    <div id="tab-cap" class="tab-content">
+        <h2>5. โปรแกรมคำนวณขนาด Capacitor Bank ปรับปรุง Power Factor</h2>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>โหลดไฟฟ้ารวม (kW):</label>
+                <input type="number" id="cap-kw" value="100">
+            </div>
+            <div class="form-group">
+                <label>ค่า Power Factor เดิม (PF1):</label>
+                <input type="number" id="cap-pf1" value="0.75" step="0.01" max="1">
+            </div>
+            <div class="form-group">
+                <label>ค่า Power Factor ที่ต้องการ (PF2):</label>
+                <input type="number" id="cap-pf2" value="0.95" step="0.01" max="1">
+            </div>
+        </div>
+        <button class="btn" onclick="calcCapacitor()">คำนวณขนาด Cap Bank</button>
+
+        <div id="cap-res-box" class="result-box" style="display:none;">
+            <h3>ขนาด Capacitor Bank ที่ต้องติดตั้ง</h3>
+            <div class="result-item">ขนาด Cap Bank รวมที่ต้องการ: <span class="highlight" id="cap-val-kvar">- kVAR</span></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         PROG 6: ประเมินค่าไฟฟ้า (PEA / MEA Estimation)
+         ========================================== -->
+    <div id="tab-bill" class="tab-content">
+        <h2>6. โปรแกรมประเมินค่าไฟฟ้าเบื้องต้น (Electricity Cost Estimator)</h2>
+        <div class="grid-3">
+            <div class="form-group">
+                <label>กำลังไฟฟ้าอุปกรณ์ (kW):</label>
+                <input type="number" id="bill-kw" value="1.5">
+            </div>
+            <div class="form-group">
+                <label>เปิดใช้งาน (ชั่วโมง/วัน):</label>
+                <input type="number" id="bill-hrs" value="8">
+            </div>
+            <div class="form-group">
+                <label>อัตราค่าไฟเฉลี่ย (บาท/หน่วย):</label>
+                <input type="number" id="bill-rate" value="4.2" step="0.1">
+            </div>
+        </div>
+        <button class="btn" onclick="calcBill()">คำนวณค่าไฟฟ้า</button>
+
+        <div id="bill-res-box" class="result-box" style="display:none;">
+            <h3>ประมาณการค่าไฟฟ้า</h3>
+            <div class="result-item" id="bill-res-day">ค่าไฟต่อวัน: - บาท ( - หน่วย/วัน)</div>
+            <div class="result-item" id="bill-res-month">ค่าไฟต่อเดือน (30 วัน): <span class="highlight" id="bill-val-month">- บาท</span></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // System Tab Switcher
+    function switchTab(evt, tabId) {
+        const contents = document.querySelectorAll('.tab-content');
+        const buttons = document.querySelectorAll('.tab-button');
+        
+        contents.forEach(c => c.classList.remove('active'));
+        buttons.forEach(b => b.classList.remove('active'));
+
+        document.getElementById(tabId).classList.add('active');
+        evt.currentTarget.classList.add('active');
     }
 
     // ==========================================
-    // 1. CABLE & CB SIZING LOGIC
+    // 1. GENERATOR LOGIC
     // ==========================================
-    let currentLoadType = 'general';
-    let currentPhase = '1';
+    let genLoads = [];
 
-    const wireTable = [
-      { size: "1.5", conduit: 15,  air: 21,  underground: 21 },
-      { size: "2.5", conduit: 21,  air: 29,  underground: 29 },
-      { size: "4",   conduit: 28,  air: 38,  underground: 38 },
-      { size: "6",   conduit: 36,  air: 49,  underground: 49 },
-      { size: "10",  conduit: 50,  air: 68,  underground: 68 },
-      { size: "16",  conduit: 68,  air: 91,  underground: 91 },
-      { size: "25",  conduit: 89,  air: 121, underground: 121 },
-      { size: "35",  conduit: 111, air: 150, underground: 150 },
-      { size: "50",  conduit: 134, air: 183, underground: 183 },
-      { size: "70",  conduit: 171, air: 233, underground: 225 },
-      { size: "95",  conduit: 207, air: 282, underground: 270 },
-      { size: "120", conduit: 239, air: 328, underground: 310 },
-      { size: "150", conduit: 272, air: 375, underground: 350 },
-      { size: "185", conduit: 310, air: 430, underground: 395 },
-      { size: "240", conduit: 364, air: 510, underground: 460 },
-      { size: "300", conduit: 419, air: 590, underground: 520 },
-      { size: "400", conduit: 502, air: 715, underground: 600 },
-      { size: "500", conduit: 578, air: 830, underground: 680 }
-    ];
+    function addGenLoad() {
+        const name = document.getElementById('gen-name').value || 'อุปกรณ์ทั่วไป';
+        const val = parseFloat(document.getElementById('gen-val').value);
+        const unit = document.getElementById('gen-unit').value;
+        const type = document.getElementById('gen-type').value;
+        const qty = parseInt(document.getElementById('gen-qty').value);
 
-    function setLoadType(type) {
-      currentLoadType = type;
-      const activeBtnClass = 'py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30';
-      const inactiveBtnClass = 'py-2.5 rounded-lg font-medium transition bg-slate-800/80 text-slate-300 hover:text-white';
-      
-      document.getElementById('btnGeneral').className = type === 'general' ? activeBtnClass : inactiveBtnClass;
-      document.getElementById('btnMotor').className = type === 'motor' ? activeBtnClass : inactiveBtnClass;
-      calculateSizing();
+        if(!val || val <= 0) { alert('กรุณากรอกกำลังไฟฟ้า'); return; }
+
+        let kwPerUnit = 0;
+        if(unit === 'W') kwPerUnit = val / 1000;
+        else if(unit === 'KW') kwPerUnit = val;
+        else if(unit === 'HP') kwPerUnit = val * 0.746;
+
+        const totalKw = kwPerUnit * qty;
+        genLoads.push({ id: Date.now(), name, val, unit, type, qty, totalKw });
+        renderGenTable();
+        document.getElementById('gen-name').value = '';
     }
 
-    function setPhase(phase) {
-      currentPhase = phase;
-      const activeBtnClass = 'py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30';
-      const inactiveBtnClass = 'py-2.5 rounded-lg font-medium transition bg-slate-800/80 text-slate-300 hover:text-white';
-
-      document.getElementById('btnPhase1').className = phase === '1' ? activeBtnClass : inactiveBtnClass;
-      document.getElementById('btnPhase3').className = phase === '3' ? activeBtnClass : inactiveBtnClass;
-      
-      updateOptions();
-      calculateSizing();
+    function removeGenLoad(id) {
+        genLoads = genLoads.filter(i => i.id !== id);
+        renderGenTable();
     }
 
-    function updateOptions() {
-      const wireType = document.getElementById('wireType').value;
-      const method = document.getElementById('installMethod');
-
-      if (wireType === 'VAF') {
-        method.value = 'air';
-        if (currentPhase === '3') {
-          alert('สาย VAF ไม่รองรับระบบไฟฟ้า 3 เฟส');
-          document.getElementById('wireType').value = 'THW';
-        }
-      }
-      calculateSizing();
+    function renderGenTable() {
+        const tbody = document.getElementById('gen-table-body');
+        tbody.innerHTML = '';
+        genLoads.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.val} ${item.unit}</td>
+                <td>${item.type === 'inductive' ? 'มอเตอร์/แอร์ (เผื่อกระชาก)' : 'ทั่วไป'}</td>
+                <td>${item.qty}</td>
+                <td>${item.totalKw.toFixed(2)} kW</td>
+                <td><button class="btn btn-danger" onclick="removeGenLoad(${item.id})">ลบ</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
     }
 
-    function calculateSizing() {
-      const rawPower = parseFloat(document.getElementById('power').value) || 0;
-      const unit = document.getElementById('powerUnit').value;
-      const pfVal = parseFloat(document.getElementById('pf').value) || 0.85;
-      const v = currentPhase === '1' ? 220 : 380;
-      const wireType = document.getElementById('wireType').value;
-      const method = document.getElementById('installMethod').value;
-      const cores = document.getElementById('wireCores').value;
+    function calcGenerator() {
+        if(genLoads.length === 0) { alert('กรุณาเพิ่มโหลดอย่างน้อย 1 รายการ'); return; }
 
-      let powerInWatts = rawPower;
-      if (unit === 'kW') powerInWatts = rawPower * 1000;
-      else if (unit === 'HP') powerInWatts = rawPower * 746;
+        let totalRunKw = 0, totalStartKw = 0;
+        genLoads.forEach(i => {
+            totalRunKw += i.totalKw;
+            totalStartKw += (i.type === 'inductive') ? (i.totalKw * 2.5) : i.totalKw;
+        });
 
-      let iLoad = currentPhase === '1' 
-        ? powerInWatts / (v * pfVal)
-        : powerInWatts / (Math.sqrt(3) * v * pfVal);
+        const dist = parseFloat(document.getElementById('gen-dist').value) || 0;
+        const wire = parseFloat(document.getElementById('gen-wiresize').value);
+        const phase = parseInt(document.getElementById('gen-phase').value);
+        const PF = 0.8;
+        const Vsys = (phase === 1) ? 220 : 380;
 
-      if (currentLoadType === 'motor') iLoad = iLoad * 1.25;
+        const R_map = {4:5.57, 6:3.71, 10:2.24, 16:1.41, 25:0.889, 35:0.634, 50:0.473, 70:0.342};
+        const I = (phase === 1) ? (totalRunKw * 1000)/(Vsys * PF) : (totalRunKw * 1000)/(Math.sqrt(3) * Vsys * PF);
+        const R = (R_map[wire] || 1) / 1000;
+        const Vd = (phase === 1) ? (2 * I * R * dist) : (Math.sqrt(3) * I * R * dist);
+        const Vd_pct = (Vd / Vsys) * 100;
 
-      const standardCBs = [10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250];
-      const targetCB = iLoad * 1.25;
-      let cbSize = standardCBs.find(cb => cb >= targetCB) || Math.ceil(targetCB);
+        let reqKw = Math.max(totalRunKw * 1.25, totalStartKw * 1.1);
+        if(Vd_pct > 3) reqKw *= 1.08; 
+        const reqKva = reqKw / PF;
 
-      let selectedWire = null;
-      for (let item of wireTable) {
-        if (item[method] >= cbSize) {
-          selectedWire = item;
-          break;
-        }
-      }
-
-      let methodText = "เดินในท่อร้อยสาย";
-      if (method === 'air') methodText = "เดินลอยในอากาศ / เกาะผนัง";
-      if (method === 'underground') methodText = "เดินฝังดินโดยตรง";
-
-      document.getElementById('iLoad').innerText = iLoad.toFixed(2) + ' A';
-      document.getElementById('cbSize').innerText = cbSize + ' A';
-
-      if (selectedWire) {
-        document.getElementById('wireSize').innerText = selectedWire.size + ' ตร.มม.';
-        document.getElementById('wireCapacity').innerText = selectedWire[method] + ' A';
-        document.getElementById('wireDetail').innerText = `สาย ${wireType} (${cores} แกน) ${methodText}`;
-      } else {
-        document.getElementById('wireSize').innerText = 'เกินขนาดสายเดี่ยว (500 Sq.mm)';
-        document.getElementById('wireCapacity').innerText = 'N/A';
-        document.getElementById('wireDetail').innerText = 'แนะนำให้ใช้ระบบเบิ้ลสายขนาน';
-      }
-
-      const parallelBox = document.getElementById('parallelBox');
-      if (cbSize >= 160 || (selectedWire && parseFloat(selectedWire.size) >= 70)) {
-        parallelBox.classList.remove('hidden');
-        const derating = 0.8;
-        const requiredCapPerRun = (cbSize / 2) / derating;
-        let parallelWire = wireTable.find(w => w[method] >= requiredCapPerRun);
-
-        if (parallelWire) {
-          const totalCapacity = Math.round(parallelWire[method] * 2 * derating);
-          document.getElementById('parallelText').innerText = `2x (1x${parallelWire.size} ตร.มม.) / เฟส`;
-          document.getElementById('parallelCap').innerText = `พิกัดทนกระแสรวม (คิดตัวคูณลด): ${totalCapacity} A`;
-        } else {
-          const requiredCapPerRun3 = (cbSize / 3) / derating;
-          let parallelWire3 = wireTable.find(w => w[method] >= requiredCapPerRun3);
-          if (parallelWire3) {
-            const totalCapacity = Math.round(parallelWire3[method] * 3 * derating);
-            document.getElementById('parallelText').innerText = `3x (1x${parallelWire3.size} ตร.มม.) / เฟส`;
-            document.getElementById('parallelCap').innerText = `พิกัดทนกระแสรวม (คิดตัวคูณลด): ${totalCapacity} A`;
-          } else {
-            document.getElementById('parallelText').innerText = `แนะนำปรับเพิ่มเส้นขนาน (3x หรือ 4x)`;
-            document.getElementById('parallelCap').innerText = `-`;
-          }
-        }
-      } else {
-        parallelBox.classList.add('hidden');
-      }
+        document.getElementById('gen-res-box').style.display = 'block';
+        document.getElementById('gen-res-running').innerText = `กำลังไฟฟ้ารวมปกติ: ${totalRunKw.toFixed(2)} kW`;
+        document.getElementById('gen-res-starting').innerText = `กำลังไฟฟ้ารวมช่วงสตาร์ท: ${totalStartKw.toFixed(2)} kW`;
+        document.getElementById('gen-res-vd').innerText = `แรงดันตกในสายส่ง: ${Vd.toFixed(2)} V (${Vd_pct.toFixed(2)}%)`;
+        document.getElementById('gen-res-kva').innerText = `${Math.ceil(reqKva)} kVA`;
+        document.getElementById('gen-res-kw').innerText = `${Math.ceil(reqKw)} kW`;
     }
 
     // ==========================================
     // 2. VOLTAGE DROP LOGIC
     // ==========================================
-    let currentVDPhase = '1';
+    function calcVD() {
+        const phase = parseInt(document.getElementById('vd-phase').value);
+        const I = parseFloat(document.getElementById('vd-current').value);
+        const L = parseFloat(document.getElementById('vd-dist').value);
+        const size = parseFloat(document.getElementById('vd-wiresize').value);
 
-    const copperResistance = {
-      "1.5": 14.8,
-      "2.5": 8.91,
-      "4": 5.57,
-      "6": 3.71,
-      "10": 2.24,
-      "16": 1.41,
-      "25": 0.889,
-      "35": 0.641,
-      "50": 0.473,
-      "70": 0.328,
-      "95": 0.236,
-      "120": 0.188,
-      "150": 0.153,
-      "185": 0.123,
-      "240": 0.0947,
-      "300": 0.0758
-    };
+        const R_map = {2.5:8.91, 4:5.57, 6:3.71, 10:2.24, 16:1.41, 25:0.889, 35:0.634, 50:0.473};
+        const R = (R_map[size] || 1) / 1000;
+        const Vsys = (phase === 1) ? 220 : 380;
+        const Vd = (phase === 1) ? (2 * I * R * L) : (Math.sqrt(3) * I * R * L);
+        const pct = (Vd / Vsys) * 100;
 
-    function setVDPhase(phase) {
-      currentVDPhase = phase;
-      const activeBtnClass = 'py-2.5 rounded-lg transition bg-amber-600 text-white shadow-lg shadow-amber-600/30 font-medium';
-      const inactiveBtnClass = 'py-2.5 rounded-lg transition bg-slate-800/80 text-slate-300 hover:text-white font-medium';
-
-      document.getElementById('btnVDPhase1').className = phase === '1' ? activeBtnClass : inactiveBtnClass;
-      document.getElementById('btnVDPhase3').className = phase === '3' ? activeBtnClass : inactiveBtnClass;
-      
-      calculateVD();
-    }
-
-    function calculateVD() {
-      const i = parseFloat(document.getElementById('vdCurrent').value) || 0;
-      const wireSize = document.getElementById('vdWireSize').value;
-      const L = parseFloat(document.getElementById('vdDistance').value) || 0;
-      const pf = parseFloat(document.getElementById('vdPf').value) || 0.85;
-
-      const rPerKm = copperResistance[wireSize] || 1.41;
-      const rTotal = (rPerKm * (L / 1000));
-
-      let vNominal = currentVDPhase === '1' ? 220 : 380;
-      let vd = 0;
-
-      if (currentVDPhase === '1') {
-        vd = 2 * i * rTotal * pf;
-      } else {
-        vd = Math.sqrt(3) * i * rTotal * pf;
-      }
-
-      const vdPercent = (vd / vNominal) * 100;
-      const vEnd = vNominal - vd;
-
-      document.getElementById('vdVoltageDropVal').innerText = vd.toFixed(2) + ' V';
-      document.getElementById('vdEndVoltage').innerText = Math.max(0, vEnd).toFixed(2) + ' V';
-      document.getElementById('vdPercentResult').innerText = vdPercent.toFixed(2) + ' %';
-
-      const badge = document.getElementById('vdStatusBadge');
-      const percentText = document.getElementById('vdPercentResult');
-
-      if (vdPercent <= 3.0) {
-        badge.className = "mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
-        badge.innerText = "อยู่ในเกณฑ์ดีเยี่ยม (≤ 3%)";
-        percentText.className = "text-4xl font-extrabold text-emerald-400";
-      } else if (vdPercent <= 5.0) {
-        badge.className = "mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/40";
-        badge.innerText = "ยอมรับได้สำหรับสายป้อน (3% - 5%)";
-        percentText.className = "text-4xl font-extrabold text-yellow-400";
-      } else {
-        badge.className = "mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/40";
-        badge.innerText = "แรงดันตกเกินมาตรฐาน (> 5%) - ควรเพิ่มขนาดสาย";
-        percentText.className = "text-4xl font-extrabold text-red-400";
-      }
-    }
-
-    // ==========================================
-    // 3. LIGHTING LOGIC
-    // ==========================================
-    let calcMode = 'count';
-
-    function setCalcMode(mode) {
-      calcMode = mode;
-      const btnCount = document.getElementById('btnModeCount');
-      const btnLux = document.getElementById('btnModeLux');
-      const boxLuxTarget = document.getElementById('boxLuxTarget');
-      const boxFixtureInput = document.getElementById('boxFixtureInput');
-
-      if (mode === 'count') {
-        btnCount.className = "py-2 rounded-lg font-semibold transition bg-yellow-500 text-slate-950 shadow-md";
-        btnLux.className = "py-2 rounded-lg font-semibold transition bg-slate-800 text-slate-300 hover:text-white";
-        boxLuxTarget.classList.remove('hidden');
-        boxFixtureInput.classList.add('hidden');
-        document.getElementById('lblMainResult').innerText = "จำนวนโคมไฟที่แนะนำ";
-      } else {
-        btnLux.className = "py-2 rounded-lg font-semibold transition bg-yellow-500 text-slate-950 shadow-md";
-        btnCount.className = "py-2 rounded-lg font-semibold transition bg-slate-800 text-slate-300 hover:text-white";
-        boxLuxTarget.classList.add('hidden');
-        boxFixtureInput.classList.remove('hidden');
-        document.getElementById('lblMainResult').innerText = "ค่าความสว่างที่คำนวณได้จริง";
-      }
-      calculateLighting();
-    }
-
-    function applyBulbPreset() {
-      const preset = document.getElementById('lightBulbPreset').value;
-      const lumensInput = document.getElementById('lightLumens');
-      const wattsInput = document.getElementById('lightWatts');
-
-      const presetData = {
-        'panel': { lumens: 4000, watts: 40 },
-        'panel_slim': { lumens: 3600, watts: 36 },
-        'tube_double': { lumens: 3600, watts: 36 },
-        'tube_single': { lumens: 1800, watts: 18 },
-        'downlight_sq': { lumens: 1350, watts: 15 },
-        'downlight_sm': { lumens: 1000, watts: 12 },
-        'highbay_hb': { lumens: 19500, watts: 150 },
-        'highbay_sm': { lumens: 13000, watts: 100 },
-        'floodlight': { lumens: 5500, watts: 50 },
-        'batten_tri': { lumens: 4400, watts: 40 },
-        'bulb_e27': { lumens: 810, watts: 9 },
-        'bulb_high': { lumens: 2000, watts: 20 },
-        'tracklight': { lumens: 1200, watts: 15 }
-      };
-
-      if (presetData[preset]) {
-        lumensInput.value = presetData[preset].lumens;
-        wattsInput.value = presetData[preset].watts;
-      }
-      calculateLighting();
-    }
-
-    function calculateLighting() {
-      const width = parseFloat(document.getElementById('lightWidth').value) || 0;
-      const length = parseFloat(document.getElementById('lightLength').value) || 0;
-      const height = parseFloat(document.getElementById('lightHeight').value) || 2.8;
-      const lumens = parseFloat(document.getElementById('lightLumens').value) || 1;
-      const watts = parseFloat(document.getElementById('lightWatts').value) || 0;
-
-      const area = width * length;
-      const UF = 0.6;
-      const MF = 0.8;
-
-      if (area <= 0 || lumens <= 0 || height <= 0) return;
-
-      let fixtureCount = 0;
-      let actualLux = 0;
-
-      if (calcMode === 'count') {
-        const targetLux = parseFloat(document.getElementById('lightRoomType').value) || 500;
-        const totalLumensNeeded = (targetLux * area) / (UF * MF);
-        fixtureCount = Math.ceil(totalLumensNeeded / lumens);
-        actualLux = (fixtureCount * lumens * UF * MF) / area;
-        document.getElementById('valMainResult').innerText = fixtureCount + ' ชุด';
-      } else {
-        fixtureCount = parseInt(document.getElementById('inputFixtureQty').value) || 1;
-        actualLux = (fixtureCount * lumens * UF * MF) / area;
-        document.getElementById('valMainResult').innerText = Math.round(actualLux) + ' Lux';
-      }
-
-      const totalWatts = fixtureCount * watts;
-      const lpd = totalWatts / area;
-
-      const aspectRatio = length / width;
-      let cols = Math.round(Math.sqrt(fixtureCount * aspectRatio));
-      cols = Math.max(1, cols);
-      let rows = Math.ceil(fixtureCount / cols);
-
-      const spacingX = width / cols;
-      const spacingY = length / rows;
-      const avgSpacing = (spacingX + spacingY) / 2;
-
-      const hWork = Math.max(0.5, height - 0.8);
-      const shRatio = avgSpacing / hWork;
-
-      const zebraCard = document.getElementById('zebraCard');
-      const zebraIcon = document.getElementById('zebraIcon');
-      const zebraTitle = document.getElementById('zebraTitle');
-      const zebraDesc = document.getElementById('zebraDesc');
-
-      document.getElementById('valSpacing').innerText = avgSpacing.toFixed(2) + ' m';
-      document.getElementById('valSHRatio').innerText = shRatio.toFixed(2);
-
-      if (shRatio <= 1.2) {
-        zebraCard.className = "p-3.5 rounded-xl border text-left bg-emerald-950/40 border-emerald-500/40 text-emerald-200";
-        zebraIcon.innerText = "✅";
-        zebraTitle.innerText = "กระจายแสงสม่ำเสมอดี (No Zebra Effect)";
-        zebraDesc.innerText = `ระยะห่างสัดส่วน S/H = ${shRatio.toFixed(2)} อยู่ในเกณฑ์มาตรฐาน (≤ 1.2) แสงสว่างครอบคลุมทั่วถึง ไม่เกิดแถบเงาหรือรอยต่อแสงด่าง`;
-      } else if (shRatio <= 1.5) {
-        zebraCard.className = "p-3.5 rounded-xl border text-left bg-yellow-950/40 border-yellow-500/40 text-yellow-200";
-        zebraIcon.innerText = "⚠️";
-        zebraTitle.innerText = "มีความเสี่ยงเกิดแถบเงาแสงมืด (Minor Zebra Effect)";
-        zebraDesc.innerText = `ระยะห่างสัดส่วน S/H = ${shRatio.toFixed(2)} ค่อนข้างห่าง อาจมีจุดอับแสงบางจุด แนะนำเพิ่มจำนวนโคม หรือใช้โคมที่องศากระจายแสงกว้างขึ้น`;
-      } else {
-        zebraCard.className = "p-3.5 rounded-xl border text-left bg-red-950/40 border-red-500/40 text-red-200";
-        zebraIcon.innerText = "⛔";
-        zebraTitle.innerText = "เกิด Zebra Effect แน่นอน (แสงด่างเป็นลายนัยน์ตาเสือ)";
-        zebraDesc.innerText = `ระยะห่างสัดส่วน S/H = ${shRatio.toFixed(2)} เกินเกณฑ์มาตรฐานมาก (> 1.5) โคมห่างกันเกินไป เกิดเงามืดสลับสว่างชัดเจน ควรเพิ่มจำนวนโคมกระจายให้ถี่ขึ้น`;
-      }
-
-      document.getElementById('lightGridLayout').innerText = `จัดวางแนะนำ: ${rows} แถว × ${cols} คอลัมน์`;
-      document.getElementById('lightArea').innerText = area.toFixed(2) + ' ตร.ม.';
-      document.getElementById('lightTotalWatts').innerText = totalWatts + ' W';
-      document.getElementById('lightActualLux').innerText = Math.round(actualLux) + ' Lux';
-      document.getElementById('lightLPD').innerText = lpd.toFixed(2) + ' W/ตร.ม.';
-    }
-
-    // ==========================================
-    // 4. PEA ELECTRICITY BILL LOGIC
-    // ==========================================
-    function calculatePEABill() {
-      const userType = document.getElementById('peaUserType').value;
-      const units = parseFloat(document.getElementById('peaUnits').value) || 0;
-      const serviceFee = parseFloat(document.getElementById('peaServiceFee').value) || 0;
-      const ftRate = parseFloat(document.getElementById('peaFtRate').value) || 0;
-
-      let baseCost = 0;
-      let breakdown = [];
-
-      if (userType === '1.1.1') {
-        const tiers = [
-          { min: 0, max: 15, rate: 2.3488, label: '1 - 15 หน่วย' },
-          { min: 15, max: 25, rate: 2.9882, label: '16 - 25 หน่วย' },
-          { min: 25, max: 35, rate: 3.2405, label: '26 - 35 หน่วย' },
-          { min: 35, max: 100, rate: 3.6237, label: '36 - 100 หน่วย' },
-          { min: 100, max: 150, rate: 3.7171, label: '101 - 150 หน่วย' },
-          { min: 150, max: 400, rate: 4.2218, label: '151 - 400 หน่วย' },
-          { min: 400, max: Infinity, rate: 4.4217, label: '401 หน่วยขึ้นไป' }
-        ];
-
-        for (let tier of tiers) {
-          if (units > tier.min) {
-            let u = Math.min(units, tier.max) - tier.min;
-            let c = u * tier.rate;
-            baseCost += c;
-            breakdown.push({ label: tier.label, units: u, rate: tier.rate, cost: c });
-          }
+        document.getElementById('vd-res-box').style.display = 'block';
+        document.getElementById('vd-res-v').innerText = `แรงดันตก: ${Vd.toFixed(2)} โวลต์ (V)`;
+        document.getElementById('vd-res-pct').innerText = `แรงดันตกร้อยละ: ${pct.toFixed(2)} %`;
+        
+        const status = document.getElementById('vd-res-status');
+        if(pct <= 3) {
+            status.innerText = 'สถานะ: ผ่านเกณฑ์มาตรฐาน (ไม่เกิน 3%)';
+            status.style.color = 'green';
+        } else {
+            status.innerText = 'สถานะ: เกินเกณฑ์มาตรฐาน! ควรขยายขนาดสายไฟ';
+            status.style.color = 'red';
         }
-      } else {
-        const tiers = [
-          { min: 0, max: 150, rate: 3.2484, label: '1 - 150 หน่วย' },
-          { min: 150, max: 400, rate: 4.2218, label: '151 - 400 หน่วย' },
-          { min: 400, max: Infinity, rate: 4.4217, label: '401 หน่วยขึ้นไป' }
-        ];
+    }
 
-        for (let tier of tiers) {
-          if (units > tier.min) {
-            let u = Math.min(units, tier.max) - tier.min;
-            let c = u * tier.rate;
-            baseCost += c;
-            breakdown.push({ label: tier.label, units: u, rate: tier.rate, cost: c });
-          }
+    // ==========================================
+    // 3. UNIT CONVERT LOGIC
+    // ==========================================
+    function calcConv() {
+        const val = parseFloat(document.getElementById('conv-val').value);
+        const from = document.getElementById('conv-from').value;
+        if(!val) return;
+
+        let w = 0;
+        if(from === 'HP') w = val * 745.7;
+        else if(from === 'KW') w = val * 1000;
+        else if(from === 'W') w = val;
+        else if(from === 'KVA') w = val * 1000 * 0.8;
+
+        document.getElementById('conv-res-box').style.display = 'block';
+        document.getElementById('conv-res-w').innerText = `วัตต์ (W): ${w.toFixed(2)} W`;
+        document.getElementById('conv-res-kw').innerText = `กิโลวัตต์ (kW): ${(w/1000).toFixed(2)} kW`;
+        document.getElementById('conv-res-hp').innerText = `แรงม้า (HP): ${(w/745.7).toFixed(2)} HP`;
+        document.getElementById('conv-res-kva').innerText = `เควีเอ (kVA @PF 0.8): ${(w/1000/0.8).toFixed(2)} kVA`;
+    }
+
+    // ==========================================
+    // 4. BREAKER & WIRE LOGIC
+    // ==========================================
+    function calcBreaker() {
+        const phase = parseInt(document.getElementById('brk-phase').value);
+        const kw = parseFloat(document.getElementById('brk-kw').value);
+        if(!kw) return;
+
+        const Vsys = (phase === 1) ? 220 : 380;
+        const PF = 0.85;
+        let I = 0;
+        if(phase === 1) I = (kw * 1000) / (Vsys * PF);
+        else I = (kw * 1000) / (Math.sqrt(3) * Vsys * PF);
+
+        const atList = [10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200, 250];
+        const reqAT = I * 1.25;
+        let recAT = atList.find(at => at >= reqAT) || '>250';
+
+        let recWire = "2.5";
+        if(recAT > 16) recWire = "4";
+        if(recAT > 20) recWire = "6";
+        if(recAT > 32) recWire = "10";
+        if(recAT > 45) recWire = "16";
+        if(recAT > 65) recWire = "25";
+        if(recAT > 85) recWire = "35";
+        if(recAT > 110) recWire = "50";
+
+        document.getElementById('brk-res-box').style.display = 'block';
+        document.getElementById('brk-res-current').innerText = `กระแสโหลดคำนวณ: ${I.toFixed(2)} A`;
+        document.getElementById('brk-val-at').innerText = `${recAT} A`;
+        document.getElementById('brk-val-wire').innerText = `${recWire} sq.mm`;
+    }
+
+    // ==========================================
+    // 5. CAPACITOR BANK LOGIC
+    // ==========================================
+    function calcCapacitor() {
+        const kw = parseFloat(document.getElementById('cap-kw').value);
+        const pf1 = parseFloat(document.getElementById('cap-pf1').value);
+        const pf2 = parseFloat(document.getElementById('cap-pf2').value);
+
+        if(!kw || !pf1 || !pf2 || pf1 >= pf2) {
+            alert('กรุณาตรวจสอบค่า PF (ค่า PF2 ต้องมากกว่า PF1)');
+            return;
         }
-      }
 
-      const totalFt = units * ftRate;
-      const subTotal = baseCost + serviceFee + totalFt;
-      const vat = subTotal * 0.07;
-      const netTotal = subTotal + vat;
+        const tan1 = Math.tan(Math.acos(pf1));
+        const tan2 = Math.tan(Math.acos(pf2));
+        const kvar = kw * (tan1 - tan2);
 
-      document.getElementById('peaNetTotal').innerText = netTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' บาท';
-      document.getElementById('peaBaseCost').innerText = baseCost.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' บาท';
-      document.getElementById('peaFtTotal').innerText = totalFt.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' บาท';
-      document.getElementById('peaServiceFeeVal').innerText = serviceFee.toFixed(2) + ' บาท';
-      document.getElementById('peaVat').innerText = vat.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' บาท';
-
-      const tbody = document.getElementById('peaBreakdownBody');
-      tbody.innerHTML = '';
-      breakdown.forEach(item => {
-        tbody.innerHTML += `
-          <tr>
-            <td class="p-2 text-slate-300 font-medium">${item.label}</td>
-            <td class="p-2 text-right">${item.units.toLocaleString()}</td>
-            <td class="p-2 text-right text-slate-400">${item.rate.toFixed(4)}</td>
-            <td class="p-2 text-right font-semibold text-purple-300">${item.cost.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-          </tr>
-        `;
-      });
+        document.getElementById('cap-res-box').style.display = 'block';
+        document.getElementById('cap-val-kvar').innerText = `${kvar.toFixed(2)} kVAR`;
     }
 
     // ==========================================
-    // 5. AIR CONDITIONER BTU LOGIC (เพิ่มส่วนคำนวณใหม่)
+    // 6. ELECTRICITY BILL LOGIC
     // ==========================================
-    function calculateAC() {
-      const width = parseFloat(document.getElementById('acWidth').value) || 0;
-      const length = parseFloat(document.getElementById('acLength').value) || 0;
-      const height = parseFloat(document.getElementById('acHeight').value) || 2.5;
-      const baseFactor = parseFloat(document.getElementById('acRoomType').value) || 600;
-      const sunFactor = parseFloat(document.getElementById('acSunType').value) || 1.0;
+    function calcBill() {
+        const kw = parseFloat(document.getElementById('bill-kw').value);
+        const hrs = parseFloat(document.getElementById('bill-hrs').value);
+        const rate = parseFloat(document.getElementById('bill-rate').value);
 
-      const area = width * length;
-      const volume = area * height;
+        if(!kw || !hrs || !rate) return;
 
-      if (area <= 0) return;
+        const unitsPerDay = kw * hrs;
+        const costPerDay = unitsPerDay * rate;
+        const costPerMonth = costPerDay * 30;
 
-      // Base BTU calculation
-      let calculatedBTU = area * baseFactor * sunFactor;
-
-      // Height adjustment for ceilings over 2.5m
-      if (height > 2.5) {
-        const extraHeightRatio = 1 + ((height - 2.5) * 0.15);
-        calculatedBTU *= extraHeightRatio;
-      }
-
-      const totalBTU = Math.round(calculatedBTU);
-
-      // Commercial Standard AC Sizes
-      const acModels = [9000, 12000, 15000, 18000, 24000, 30000, 36000, 40000, 48000, 60000];
-      const recommendedModel = acModels.find(m => m >= totalBTU) || Math.ceil(totalBTU / 1000) * 1000;
-
-      document.getElementById('acTotalBTU').innerText = totalBTU.toLocaleString() + ' BTU/hr';
-      document.getElementById('acStdModel').innerText = `รุ่นมาตรฐานที่แนะนำ: ${recommendedModel.toLocaleString()} BTU/hr`;
-      document.getElementById('acArea').innerText = area.toFixed(2) + ' ตร.ม.';
-      document.getElementById('acVolume').innerText = volume.toFixed(2) + ' ลบ.ม.';
-
-      // Multi-Split logic for large rooms (>= 24,000 BTU)
-      const splitBox = document.getElementById('acSplitBox');
-      const splitDetails = document.getElementById('acSplitDetails');
-
-      if (totalBTU >= 24000) {
-        splitBox.classList.remove('hidden');
-
-        // Option 1: Split into 2 units
-        const halfBTU = totalBTU / 2;
-        const unitSize2 = acModels.find(m => m >= halfBTU) || Math.ceil(halfBTU / 1000) * 1000;
-
-        // Option 2: Split into 3 units
-        const thirdBTU = totalBTU / 3;
-        const unitSize3 = acModels.find(m => m >= thirdBTU) || Math.ceil(thirdBTU / 1000) * 1000;
-
-        splitDetails.innerHTML = `
-          <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-            <span class="text-slate-300 font-medium">แบ่งติดตั้ง 2 เครื่อง:</span>
-            <span class="font-bold text-cyan-300">${unitSize2.toLocaleString()} BTU x 2 เครื่อง</span>
-          </div>
-          <div class="bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-            <span class="text-slate-300 font-medium">แบ่งติดตั้ง 3 เครื่อง:</span>
-            <span class="font-bold text-cyan-300">${unitSize3.toLocaleString()} BTU x 3 เครื่อง</span>
-          </div>
-        `;
-      } else {
-        splitBox.classList.add('hidden');
-      }
+        document.getElementById('bill-res-box').style.display = 'block';
+        document.getElementById('bill-res-day').innerText = `ค่าไฟต่อวัน: ${costPerDay.toFixed(2)} บาท (${unitsPerDay.toFixed(2)} หน่วย/วัน)`;
+        document.getElementById('bill-val-month').innerText = `${costPerMonth.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})} บาท`;
     }
-  </script>
+</script>
+
 </body>
 </html>
