@@ -4,26 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HC Electrical - Engineering Tools</title>
-
-  <!-- Favicon Icon -->
-  <link rel="icon" type="image/png" href="https://i.ibb.co/Y4W8d4bB/hc-electrical-logo.png" />
-  
-  <!-- Open Graph for Social Media -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Electrical Engineering Tools - HC Electrical" />
-  <meta property="og:description" content="เครื่องมือคำนวณทางไฟฟ้า ฝ่ายซ่อมบำรุงเครื่องกลและไฟฟ้า" />
-  <meta property="og:image" content="https://i.ibb.co/Y4W8d4bB/hc-electrical-logo.png" />
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen text-slate-100 flex items-center justify-center p-4 relative overflow-x-hidden bg-slate-950">
 
   <!-- Background Image & Overlay -->
-  <div 
-    class="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
-    style="background-image: url('https://wsrv.nl/?url=https://img2.pic.in.th/images-2b75e5d88945caa41.jpg');"
-  ></div>
+  <div class="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10" style="background-image: url('https://wsrv.nl/?url=https://img2.pic.in.th/images-2b75e5d88945caa41.jpg');"></div>
   <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-[2px] -z-10"></div>
 
   <!-- Credits (Top Right) -->
@@ -55,7 +41,7 @@
       </div>
     </div>
 
-    <!-- PAGE 1: HOME SELECTION (หน้าหลักสำหรับเลือกโปรแกรม) -->
+    <!-- PAGE 1: HOME SELECTION -->
     <div id="pageHome" class="space-y-3">
       <div class="text-center text-xs font-semibold text-slate-300 mb-1">
         กรุณาเลือกโปรแกรมที่ต้องการใช้งาน
@@ -97,7 +83,7 @@
         </div>
       </button>
 
-      <!-- Card 3: Lighting Calculation (ส่วนที่เพิ่มเข้ามาใหม่) -->
+      <!-- Card 3: Lighting Calculation -->
       <button 
         onclick="showPage('light')" 
         class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-yellow-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
@@ -110,7 +96,7 @@
             คำนวณระบบแสงสว่าง (Lighting)
           </h2>
           <p class="text-[11px] text-slate-400 mt-0.5">
-            คำนวณหาจำนวนหลอดไฟ ค่าความสว่าง (Lux) และการประหยัดพลังงานในห้องต่าง ๆ
+            หาจำนวนโคม/ความสว่าง (Lux) วิเคราะห์ Zebra Effect & สัดส่วนระยะติดตั้ง
           </p>
         </div>
       </button>
@@ -118,7 +104,6 @@
 
     <!-- PAGE 2: CABLE & CB SIZING CALCULATOR -->
     <div id="pageSizing" class="space-y-4 hidden">
-      <!-- Top Nav Back Button -->
       <div class="flex items-center justify-between">
         <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
           ←กลับหน้าหลัก
@@ -126,13 +111,11 @@
         <span class="text-xs font-semibold text-blue-400">⚡ Cable & CB Sizing</span>
       </div>
 
-      <!-- Main Input Card -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
         <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
           <span class="flex items-center gap-2"><span class="text-yellow-400">⚡</span> ระบุข้อมูลโหลดไฟฟ้า</span>
         </h2>
         
-        <!-- Load Type Switch -->
         <div class="grid grid-cols-2 gap-2 text-xs">
           <button id="btnGeneral" type="button" onclick="setLoadType('general')" class="py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30">
             โหลดทั่วไป / แสงสว่าง
@@ -142,7 +125,6 @@
           </button>
         </div>
 
-        <!-- Power Input & Unit Selection -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">กำลังไฟฟ้า / ขนาดโหลด:</label>
           <div class="flex gap-2">
@@ -166,7 +148,6 @@
           </div>
         </div>
 
-        <!-- Phase Selection -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระบบไฟฟ้า (Phase):</label>
           <div class="grid grid-cols-2 gap-2 text-xs">
@@ -179,7 +160,6 @@
           </div>
         </div>
 
-        <!-- ชนิดสายไฟ และ จำนวนแกน -->
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="text-xs text-slate-200 block mb-1.5 font-medium">ชนิดสายไฟ:</label>
@@ -201,7 +181,6 @@
           </div>
         </div>
 
-        <!-- วิธีการเดินสาย -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">วิธีการเดินสาย:</label>
           <select id="installMethod" onchange="calculateSizing()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
@@ -211,7 +190,6 @@
           </select>
         </div>
 
-        <!-- Power Factor -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">Power Factor (PF):</label>
           <input 
@@ -225,34 +203,25 @@
         </div>
       </div>
 
-      <!-- Result Card -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
         <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณ (อ้างอิงมาตรฐาน วสท.)</div>
-        
         <div>
           <div class="text-xs text-slate-400 mb-1">กระแสโหลดใช้งานจริง (I_load)</div>
           <div id="iLoad" class="text-3xl font-extrabold text-blue-400">0 A</div>
         </div>
-
         <div class="pt-3 border-t border-slate-800">
           <div class="text-xs text-slate-400 mb-1">ขนาด Main CB ที่แนะนำ (In)</div>
           <div id="cbSize" class="text-3xl font-extrabold text-red-500">0 A</div>
         </div>
-
-        <!-- Single Cable Result -->
         <div class="pt-3 border-t border-slate-800">
           <div class="text-xs text-slate-400 mb-1">ขนาดสายไฟแนะนำ (สายเดี่ยว)</div>
           <div id="wireSize" class="text-2xl font-bold text-emerald-400">0 ตร.มม.</div>
-          
           <div class="mt-2 inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
             <span class="text-xs text-emerald-300">พิกัดทนกระแสสาย (Iz): </span>
             <span id="wireCapacity" class="text-xs font-bold text-emerald-400">0 A</span>
           </div>
-
           <div id="wireDetail" class="text-xs text-slate-400 mt-2">-</div>
         </div>
-
-        <!-- Parallel Run Recommendation -->
         <div id="parallelBox" class="pt-3 border-t border-slate-800 hidden">
           <div class="text-xs text-yellow-400 font-semibold mb-1 flex items-center justify-center gap-1">
             <span>🔀</span> คำแนะนำทางเลือก: การเบิ้ลสาย (Parallel Runs)
@@ -268,7 +237,6 @@
 
     <!-- PAGE 3: VOLTAGE DROP CALCULATOR -->
     <div id="pageVD" class="space-y-4 hidden">
-      <!-- Top Nav Back Button -->
       <div class="flex items-center justify-between">
         <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
           ←กลับหน้าหลัก
@@ -276,13 +244,11 @@
         <span class="text-xs font-semibold text-amber-400">📉 Voltage Drop Calculator</span>
       </div>
 
-      <!-- Inputs -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
         <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
           <span class="flex items-center gap-2"><span class="text-amber-400">📐</span> ข้อมูลแรงดันและระยะทาง</span>
         </h2>
 
-        <!-- Phase Selection VD -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระบบไฟฟ้า (Phase):</label>
           <div class="grid grid-cols-2 gap-2 text-xs">
@@ -295,7 +261,6 @@
           </div>
         </div>
 
-        <!-- Current (Amp) Input -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">กระแสไฟฟ้าที่ใช้งานจริง (Amp):</label>
           <input 
@@ -308,7 +273,6 @@
           />
         </div>
 
-        <!-- Wire Size Selection -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">ขนาดสายไฟ (Copper / ตร.มม.):</label>
           <select id="vdWireSize" onchange="calculateVD()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-semibold">
@@ -331,7 +295,6 @@
           </select>
         </div>
 
-        <!-- Distance Input -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระยะทางเดินสายไฟ (เมตร):</label>
           <input 
@@ -344,7 +307,6 @@
           />
         </div>
 
-        <!-- Power Factor VD -->
         <div>
           <label class="text-xs text-slate-200 block mb-1.5 font-medium">Power Factor (PF):</label>
           <input 
@@ -358,10 +320,8 @@
         </div>
       </div>
 
-      <!-- Result Card VD -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
         <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณ แรงดันตก (Voltage Drop)</div>
-
         <div>
           <div class="text-xs text-slate-400 mb-1">เปอร์เซ็นต์แรงดันตก (% Voltage Drop)</div>
           <div id="vdPercentResult" class="text-4xl font-extrabold text-emerald-400">0.00 %</div>
@@ -380,14 +340,13 @@
             <div id="vdEndVoltage" class="text-base font-bold text-blue-400">0.00 V</div>
           </div>
         </div>
-
         <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
           * มาตรฐาน วสท. แนะนำแรงดันตกไม่เกิน <strong>3%</strong> สำหรับวงจรย่อย และไม่เกิน <strong>5%</strong> สำหรับรวมสายป้อนและวงจรย่อย
         </div>
       </div>
     </div>
 
-    <!-- PAGE 4: LIGHTING CALCULATOR (เพิ่มหน้าระบบคำนวณแสงสว่างเข้ามาใหม่) -->
+    <!-- PAGE 4: LIGHTING CALCULATOR (ปรับปรุงใหม่ เพิ่ม 2 โหมด + Zebra Effect + โคมไฟหลากหลาย) -->
     <div id="pageLight" class="space-y-4 hidden">
       <!-- Top Nav Back Button -->
       <div class="flex items-center justify-between">
@@ -397,59 +356,111 @@
         <span class="text-xs font-semibold text-yellow-400">💡 Lighting Calculator</span>
       </div>
 
-      <!-- Inputs -->
+      <!-- Mode Switcher -->
+      <div class="bg-slate-900/85 backdrop-blur-md p-1.5 rounded-xl border border-slate-700/60 grid grid-cols-2 gap-1.5 text-xs shadow-xl">
+        <button id="btnModeCount" onclick="setCalcMode('count')" class="py-2 rounded-lg font-semibold transition bg-yellow-500 text-slate-950 shadow-md">
+          🎯 คำนวณหาจำนวนโคม (จาก Lux)
+        </button>
+        <button id="btnModeLux" onclick="setCalcMode('lux')" class="py-2 rounded-lg font-semibold transition bg-slate-800 text-slate-300 hover:text-white">
+          🔍 คำนวณหาค่า Lux (จากโคม)
+        </button>
+      </div>
+
+      <!-- Inputs Card -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
         <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
           <span class="flex items-center gap-2"><span class="text-yellow-400">💡</span> ข้อมูลห้องและโคมไฟ</span>
         </h2>
 
-        <!-- Room Type Preset -->
-        <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ประเภทห้อง / ค่าความสว่างเป้าหมาย:</label>
-          <select id="lightRoomType" onchange="updateLightTarget()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500 font-semibold">
-            <option value="150">ห้องเก็บของ / ทางเดิน (150 Lux)</option>
-            <option value="300">ห้องนั่งเล่น / ห้องพักผ่อน (300 Lux)</option>
-            <option value="350">ห้องประชุม (350 Lux)</option>
-            <option value="500" selected>สำนักงาน / ห้องทำงานทั่วไป (500 Lux)</option>
-            <option value="750">ห้องเขียนแบบ / งานละเอียด (750 Lux)</option>
+        <!-- Mode A: Lux Target Input -->
+        <div id="boxLuxTarget">
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ประเภทห้อง / ค่าความสว่างเป้าหมาย (Lux):</label>
+          <select id="lightRoomType" onchange="calculateLighting()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500 font-semibold">
+            <option value="100">คลังสินค้า / ลานจอดรถ / ทางเดินทั่วไป (100 Lux)</option>
+            <option value="150">ห้องเก็บของ / ห้องเครื่องจักร / บันได (150 Lux)</option>
+            <option value="200">โรงอาหาร / ห้องโถงรับรอง (200 Lux)</option>
+            <option value="300">ห้องนั่งเล่น / ร้านค้าทั่วไป / พื้นที่ประกอบงานหยาบ (300 Lux)</option>
+            <option value="350">ห้องประชุม / คลินิก (350 Lux)</option>
+            <option value="500" selected>สำนักงาน / ห้องทำงานทั่วไป / ห้องเรียน (500 Lux)</option>
+            <option value="750">ห้องเขียนแบบ / ห้องตรวจโรค / งานประกอบละเอียด (750 Lux)</option>
+            <option value="1000">ห้องผ่าตัด / งานตรวจสอบคุณภาพละเอียดสูง (1000 Lux)</option>
           </select>
         </div>
 
-        <!-- Room Dimensions -->
-        <div class="grid grid-cols-2 gap-3">
+        <!-- Mode B: Fixture Count Input -->
+        <div id="boxFixtureInput" class="hidden">
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">จำนวนโคมไฟที่ต้องการติดตั้ง (ชุด):</label>
+          <input 
+            type="number" 
+            id="inputFixtureQty" 
+            value="6" 
+            min="1"
+            oninput="calculateLighting()" 
+            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-yellow-400 font-bold focus:outline-none focus:border-yellow-500 transition"
+          />
+        </div>
+
+        <!-- Room Dimensions & Height -->
+        <div class="grid grid-cols-3 gap-2">
           <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความกว้างห้อง (เมตร):</label>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความกว้าง (m):</label>
             <input 
               type="number" 
               id="lightWidth" 
               value="4" 
               step="0.5" 
               oninput="calculateLighting()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-yellow-500 transition"
             />
           </div>
           <div>
-            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความยาวห้อง (เมตร):</label>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความยาว (m):</label>
             <input 
               type="number" 
               id="lightLength" 
               value="6" 
               step="0.5" 
               oninput="calculateLighting()" 
-              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-yellow-500 transition"
+            />
+          </div>
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความสูงติดตั้ง (m):</label>
+            <input 
+              type="number" 
+              id="lightHeight" 
+              value="2.8" 
+              step="0.1" 
+              oninput="calculateLighting()" 
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-yellow-500 transition"
             />
           </div>
         </div>
 
-        <!-- Bulb Spec Preset -->
+        <!-- Bulb Presets (Expanded Variety) -->
         <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">เลือกประเภทโคมไฟสำเร็จรูป:</label>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">เลือกชนิดโคมไฟ / หลอดไฟ (หลากหลาย):</label>
           <select id="lightBulbPreset" onchange="applyBulbPreset()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
-            <option value="custom">กำหนดเอง (Custom Lumens/Watt)</option>
-            <option value="panel" selected>LED Panel 60x60cm (40W / 4,000 lm)</option>
-            <option value="tube">LED Tube T8 (18W / 1,800 lm)</option>
-            <option value="downlight">LED Downlight 4" (12W / 1,000 lm)</option>
-            <option value="bulb">LED Bulb E27 (9W / 810 lm)</option>
+            <optgroup label="🏢 โคมสำนักงาน & ฝ้าเพดาน (Commercial)">
+              <option value="panel" selected>LED Panel 60x60 cm (40W / 4,000 lm)</option>
+              <option value="panel_slim">LED Panel Slim 30x120 cm (36W / 3,600 lm)</option>
+              <option value="tube_double">โคมตะแกรง LED T8 2x18W (36W / 3,600 lm)</option>
+              <option value="tube_single">โคมรางเรียบ LED Tube T8 1x18W (18W / 1,800 lm)</option>
+              <option value="downlight_sq">LED Downlight ฝังฝ้า 6" (15W / 1,350 lm)</option>
+              <option value="downlight_sm">LED Downlight ฝังฝ้า 4" (12W / 1,000 lm)</option>
+            </optgroup>
+            <optgroup label="🏭 โคมอุตสาหกรรม & เพดานสูง (Industrial)">
+              <option value="highbay_hb">LED High Bay 150W (150W / 19,500 lm)</option>
+              <option value="highbay_sm">LED High Bay 100W (100W / 13,000 lm)</option>
+              <option value="floodlight">LED Floodlight สปอตไลท์ (50W / 5,500 lm)</option>
+              <option value="batten_tri">LED Tri-Proof กันน้ำกันฝุ่น (40W / 4,400 lm)</option>
+            </optgroup>
+            <optgroup label="🏠 โคมไฟบ้าน & งานตกแต่ง (Residential & Decor)">
+              <option value="bulb_e27">หลอด LED Bulb E27 (9W / 810 lm)</option>
+              <option value="bulb_high">หลอด LED High Watt E27 (20W / 2,000 lm)</option>
+              <option value="tracklight">LED Track Light โคมแทร็กไลท์ (15W / 1,200 lm)</option>
+            </optgroup>
+            <option value="custom">⚙️ กำหนดค่าเอง (Custom Lumens / Watts)</option>
           </select>
         </div>
 
@@ -482,15 +493,32 @@
 
       <!-- Result Card Lighting -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
-        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณระบบแสงสว่าง (Lumen Method)</div>
+        <div class="text-xs text-slate-300 font-medium">📊 ผลการวิเคราะห์แสงสว่าง (Lumen Method & Spacing Ratio)</div>
 
-        <div>
-          <div class="text-xs text-slate-400 mb-1">จำนวนโคมไฟที่แนะนำ</div>
-          <div id="lightFixtureCount" class="text-4xl font-extrabold text-yellow-400">0 ชุด</div>
+        <!-- Primary Output Display -->
+        <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+          <div id="lblMainResult" class="text-xs text-slate-400 mb-1">จำนวนโคมไฟที่แนะนำ</div>
+          <div id="valMainResult" class="text-4xl font-extrabold text-yellow-400">0 ชุด</div>
           <div id="lightGridLayout" class="text-xs text-slate-300 mt-1 font-semibold">การจัดวาง: -</div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800 text-left">
+        <!-- Zebra Effect Alert Box -->
+        <div id="zebraCard" class="p-3.5 rounded-xl border text-left transition-all">
+          <div class="flex items-center gap-2 font-bold text-xs">
+            <span id="zebraIcon" class="text-base">⚠️</span>
+            <span id="zebraTitle">วิเคราะห์ Zebra Effect (แสงด่างเป็นลายนัยน์ตาเสือ)</span>
+          </div>
+          <div id="zebraDesc" class="text-[11px] mt-1.5 leading-relaxed">
+            -
+          </div>
+          <div class="mt-2 text-[10px] grid grid-cols-2 gap-2 opacity-90 border-t border-slate-700/40 pt-1.5">
+            <div>ระยะห่างระหว่างโคม (S): <span id="valSpacing" class="font-bold">0.0 m</span></div>
+            <div>ระยะห่างสัดส่วน (S/H): <span id="valSHRatio" class="font-bold">0.0</span></div>
+          </div>
+        </div>
+
+        <!-- Secondary Stats Grid -->
+        <div class="grid grid-cols-2 gap-3 text-left">
           <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
             <div class="text-[10px] text-slate-400">พื้นที่ห้องรวม</div>
             <div id="lightArea" class="text-base font-bold text-blue-400">0.00 ตร.ม.</div>
@@ -513,7 +541,7 @@
         </div>
 
         <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
-          * คำนวณโดยใช้สัมประสิทธิ์การใช้ประโยชน์ (UF = 0.6) และปัจจัยการบำรุงรักษา (MF = 0.8) ตามมาตรฐานวิศวกรรมไฟฟ้า
+          * เกณฑ์ Spacing-to-Height Ratio (S/H ≤ 1.2) ป้องกันเงามืดมืดมืดสนิทและรอยต่อแสง (Zebra Effect) ตามมาตรฐานวิศวกรรมสว่าง
         </div>
       </div>
     </div>
@@ -657,7 +685,6 @@
         document.getElementById('wireDetail').innerText = 'แนะนำให้ใช้ระบบเบิ้ลสายขนาน';
       }
 
-      // Parallel Calculation
       const parallelBox = document.getElementById('parallelBox');
       if (cbSize >= 160 || (selectedWire && parseFloat(selectedWire.size) >= 70)) {
         parallelBox.classList.remove('hidden');
@@ -765,9 +792,30 @@
     }
 
     // ==========================================
-    // 3. LIGHTING LOGIC (ระบบคำนวณแสงสว่างที่เพิ่มเข้ามา)
+    // 3. LIGHTING LOGIC (เพิ่มสลับโหมด + Zebra Effect + Preset หลากหลาย)
     // ==========================================
-    function updateLightTarget() {
+    let calcMode = 'count'; // 'count' = คำนวณหาจำนวนโคม, 'lux' = คำนวณหาค่า Lux
+
+    function setCalcMode(mode) {
+      calcMode = mode;
+      const btnCount = document.getElementById('btnModeCount');
+      const btnLux = document.getElementById('btnModeLux');
+      const boxLuxTarget = document.getElementById('boxLuxTarget');
+      const boxFixtureInput = document.getElementById('boxFixtureInput');
+
+      if (mode === 'count') {
+        btnCount.className = "py-2 rounded-lg font-semibold transition bg-yellow-500 text-slate-950 shadow-md";
+        btnLux.className = "py-2 rounded-lg font-semibold transition bg-slate-800 text-slate-300 hover:text-white";
+        boxLuxTarget.classList.remove('hidden');
+        boxFixtureInput.classList.add('hidden');
+        document.getElementById('lblMainResult').innerText = "จำนวนโคมไฟที่แนะนำ";
+      } else {
+        btnLux.className = "py-2 rounded-lg font-semibold transition bg-yellow-500 text-slate-950 shadow-md";
+        btnCount.className = "py-2 rounded-lg font-semibold transition bg-slate-800 text-slate-300 hover:text-white";
+        boxLuxTarget.classList.add('hidden');
+        boxFixtureInput.classList.remove('hidden');
+        document.getElementById('lblMainResult').innerText = "ค่าความสว่างที่คำนวณได้จริง";
+      }
       calculateLighting();
     }
 
@@ -776,26 +824,33 @@
       const lumensInput = document.getElementById('lightLumens');
       const wattsInput = document.getElementById('lightWatts');
 
-      if (preset === 'panel') {
-        lumensInput.value = 4000;
-        wattsInput.value = 40;
-      } else if (preset === 'tube') {
-        lumensInput.value = 1800;
-        wattsInput.value = 18;
-      } else if (preset === 'downlight') {
-        lumensInput.value = 1000;
-        wattsInput.value = 12;
-      } else if (preset === 'bulb') {
-        lumensInput.value = 810;
-        wattsInput.value = 9;
+      const presetData = {
+        'panel': { lumens: 4000, watts: 40 },
+        'panel_slim': { lumens: 3600, watts: 36 },
+        'tube_double': { lumens: 3600, watts: 36 },
+        'tube_single': { lumens: 1800, watts: 18 },
+        'downlight_sq': { lumens: 1350, watts: 15 },
+        'downlight_sm': { lumens: 1000, watts: 12 },
+        'highbay_hb': { lumens: 19500, watts: 150 },
+        'highbay_sm': { lumens: 13000, watts: 100 },
+        'floodlight': { lumens: 5500, watts: 50 },
+        'batten_tri': { lumens: 4400, watts: 40 },
+        'bulb_e27': { lumens: 810, watts: 9 },
+        'bulb_high': { lumens: 2000, watts: 20 },
+        'tracklight': { lumens: 1200, watts: 15 }
+      };
+
+      if (presetData[preset]) {
+        lumensInput.value = presetData[preset].lumens;
+        wattsInput.value = presetData[preset].watts;
       }
       calculateLighting();
     }
 
     function calculateLighting() {
-      const targetLux = parseFloat(document.getElementById('lightRoomType').value) || 500;
       const width = parseFloat(document.getElementById('lightWidth').value) || 0;
       const length = parseFloat(document.getElementById('lightLength').value) || 0;
+      const height = parseFloat(document.getElementById('lightHeight').value) || 2.8;
       const lumens = parseFloat(document.getElementById('lightLumens').value) || 1;
       const watts = parseFloat(document.getElementById('lightWatts').value) || 0;
 
@@ -803,25 +858,68 @@
       const UF = 0.6; // Utilization Factor
       const MF = 0.8; // Maintenance Factor
 
-      if (area <= 0 || lumens <= 0) return;
+      if (area <= 0 || lumens <= 0 || height <= 0) return;
 
-      // Lumen Method Formula: N = (E * A) / (Lumens * UF * MF)
-      const totalLumensNeeded = (targetLux * area) / (UF * MF);
-      const fixtureCount = Math.ceil(totalLumensNeeded / lumens);
+      let fixtureCount = 0;
+      let actualLux = 0;
+
+      if (calcMode === 'count') {
+        const targetLux = parseFloat(document.getElementById('lightRoomType').value) || 500;
+        const totalLumensNeeded = (targetLux * area) / (UF * MF);
+        fixtureCount = Math.ceil(totalLumensNeeded / lumens);
+        actualLux = (fixtureCount * lumens * UF * MF) / area;
+        document.getElementById('valMainResult').innerText = fixtureCount + ' ชุด';
+      } else {
+        fixtureCount = parseInt(document.getElementById('inputFixtureQty').value) || 1;
+        actualLux = (fixtureCount * lumens * UF * MF) / area;
+        document.getElementById('valMainResult').innerText = Math.round(actualLux) + ' Lux';
+      }
+
       const totalWatts = fixtureCount * watts;
+      const lpd = totalWatts / area;
 
-      // Actual Lux achieved
-      const actualLux = (fixtureCount * lumens * UF * MF) / area;
-      const lpd = totalWatts / area; // Lighting Power Density (W/m²)
-
-      // Calculate Grid Layout
+      // Grid Layout & Spacing Calculation
       const aspectRatio = length / width;
       let cols = Math.round(Math.sqrt(fixtureCount * aspectRatio));
       cols = Math.max(1, cols);
       let rows = Math.ceil(fixtureCount / cols);
 
-      // Render Outputs
-      document.getElementById('lightFixtureCount').innerText = fixtureCount + ' ชุด';
+      // Average Spacing between fixtures (m)
+      const spacingX = width / cols;
+      const spacingY = length / rows;
+      const avgSpacing = (spacingX + spacingY) / 2;
+
+      // Work plane height assumption: 0.8m from floor
+      const hWork = Math.max(0.5, height - 0.8);
+      const shRatio = avgSpacing / hWork;
+
+      // Zebra Effect Check
+      const zebraCard = document.getElementById('zebraCard');
+      const zebraIcon = document.getElementById('zebraIcon');
+      const zebraTitle = document.getElementById('zebraTitle');
+      const zebraDesc = document.getElementById('zebraDesc');
+
+      document.getElementById('valSpacing').innerText = avgSpacing.toFixed(2) + ' m';
+      document.getElementById('valSHRatio').innerText = shRatio.toFixed(2);
+
+      if (shRatio <= 1.2) {
+        zebraCard.className = "p-3.5 rounded-xl border text-left bg-emerald-950/40 border-emerald-500/40 text-emerald-200";
+        zebraIcon.innerText = "✅";
+        zebraTitle.innerText = "กระจายแสงสม่ำเสมอดี (No Zebra Effect)";
+        zebraDesc.innerText = `ระยะห่างสัดส่วน S/H = ${shRatio.toFixed(2)} อยู่ในเกณฑ์มาตรฐาน (≤ 1.2) แสงสว่างครอบคลุมทั่วถึง ไม่เกิดแถบเงาหรือรอยต่อแสงด่าง`;
+      } else if (shRatio <= 1.5) {
+        zebraCard.className = "p-3.5 rounded-xl border text-left bg-yellow-950/40 border-yellow-500/40 text-yellow-200";
+        zebraIcon.innerText = "⚠️";
+        zebraTitle.innerText = "มีความเสี่ยงเกิดแถบเงาแสงมืด (Minor Zebra Effect)";
+        zebraDesc.innerText = `ระยะห่างสัดส่วน S/H = ${shRatio.toFixed(2)} ค่อนข้างห่าง อาจมีจุดอับแสงบางจุด แนะนำเพิ่มจำนวนโคม หรือใช้โคมที่องศากระจายแสงกว้างขึ้น`;
+      } else {
+        zebraCard.className = "p-3.5 rounded-xl border text-left bg-red-950/40 border-red-500/40 text-red-200";
+        zebraIcon.innerText = "⛔";
+        zebraTitle.innerText = "เกิด Zebra Effect แน่นอน (แสงด่างเป็นลายนัยน์ตาเสือ)";
+        zebraDesc.innerText = `ระยะห่างสัดส่วน S/H = ${shRatio.toFixed(2)} เกินเกณฑ์มาตรฐานมาก (> 1.5) โคมห่างกันเกินไป เกิดเงามืดสลับสว่างชัดเจน ควรเพิ่มจำนวนโคมกระจายให้ถี่ขึ้น`;
+      }
+
+      // Render General Outputs
       document.getElementById('lightGridLayout').innerText = `จัดวางแนะนำ: ${rows} แถว × ${cols} คอลัมน์`;
       document.getElementById('lightArea').innerText = area.toFixed(2) + ' ตร.ม.';
       document.getElementById('lightTotalWatts').innerText = totalWatts + ' W';
