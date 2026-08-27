@@ -1,239 +1,832 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบคำนวณวิศวกรรมไฟฟ้าแบบครบวงจร</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HC Electrical - Engineering Tools</title>
+
+  <!-- Favicon Icon -->
+  <link rel="icon" type="image/png" href="https://i.ibb.co/Y4W8d4bB/hc-electrical-logo.png" />
+  
+  <!-- Open Graph for Social Media -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Electrical Engineering Tools - HC Electrical" />
+  <meta property="og:description" content="เครื่องมือคำนวณทางไฟฟ้า ฝ่ายซ่อมบำรุงเครื่องกลและไฟฟ้า" />
+  <meta property="og:image" content="https://i.ibb.co/Y4W8d4bB/hc-electrical-logo.png" />
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .tab-btn.active {
-      border-bottom: 3px solid #2563eb;
-      color: #2563eb;
-      font-weight: bold;
-    }
-  </style>
 </head>
-<body class="bg-slate-100 min-h-screen p-4 md:p-8 font-sans">
-  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
-    <h1 class="text-2xl font-bold text-slate-800 text-center mb-6">เครื่องมือคำนวณวิศวกรรมไฟฟ้า (Electrical Calculator Suite)</h1>
-    
-    <!-- Tab Navigation -->
-    <div class="flex border-b border-slate-200 mb-6">
-      <button class="tab-btn active flex-1 py-3 text-center text-slate-600 transition" onclick="switchTab('lighting')">1. คำนวณแสงสว่าง</button>
-      <button class="tab-btn flex-1 py-3 text-center text-slate-600 transition" onclick="switchTab('wire')">2. คำนวณขนาดสายไฟ</button>
-      <button class="tab-btn flex-1 py-3 text-center text-slate-600 transition" onclick="switchTab('volt-drop')">3. คำนวณแรงดันตก</button>
+<body class="min-h-screen text-slate-100 flex items-center justify-center p-4 relative overflow-x-hidden bg-slate-950">
+
+  <!-- Background Image & Overlay -->
+  <div 
+    class="fixed inset-0 bg-cover bg-center bg-no-repeat -z-10"
+    style="background-image: url('https://wsrv.nl/?url=https://img2.pic.in.th/images-2b75e5d88945caa41.jpg');"
+  ></div>
+  <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-[2px] -z-10"></div>
+
+  <!-- Credits (Top Right) -->
+  <div class="fixed top-3 right-3 text-right z-50 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/60 shadow-lg">
+    <div class="text-[10px] text-slate-300 font-medium">By : Amorn Amornkul</div>
+    <div class="text-[9px] text-emerald-400 font-semibold">HC Electrical</div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <div class="max-w-md w-full space-y-4 my-8">
+
+    <!-- Header Section / Logo -->
+    <div class="bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-2xl text-center space-y-2">
+      <div class="inline-block p-1.5 bg-slate-950/80 rounded-2xl border border-slate-800 shadow-inner">
+        <img 
+          src="https://i.ibb.co/Y4W8d4bB/hc-electrical-logo.png" 
+          alt="HC Electrical Logo" 
+          class="w-40 h-auto mx-auto rounded-xl shadow-md cursor-pointer"
+          onclick="showPage('home')"
+        />
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-slate-100 flex items-center justify-center gap-1.5">
+          <span class="text-emerald-400 font-extrabold">HC</span> Electrical Tools
+        </h1>
+        <p class="text-[11px] text-slate-300 mt-0.5">
+          เครื่องมือคำนวณทางวิศวกรรมไฟฟ้า (ฝ่ายซ่อมบำรุง)
+        </p>
+      </div>
     </div>
 
-    <!-- 1. TAB: LIGHTING CALCULATOR -->
-    <div id="tab-lighting" class="tab-content">
-      <h2 class="text-xl font-semibold mb-4 text-slate-700">คำนวณระบบแสงสว่าง (Lumen Method)</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label class="block text-sm font-medium text-slate-600">ความยาวห้อง (ม.):</label>
-          <input type="number" id="light-length" value="6" class="w-full mt-1 p-2 border rounded-md">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-600">ความกว้างห้อง (ม.):</label>
-          <input type="number" id="light-width" value="4" class="w-full mt-1 p-2 border rounded-md">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-600">ความสว่างเป้าหมาย (Lux):</label>
-          <select id="light-lux" class="w-full mt-1 p-2 border rounded-md">
-            <option value="150">150 Lux (ทางเดิน/ห้องเก็บของ)</option>
-            <option value="300">300 Lux (ห้องนั่งเล่น/พักผ่อน)</option>
-            <option value="500" selected>500 Lux (สำนักงาน/ห้องทำงาน)</option>
-            <option value="750">750 Lux (ห้องเขียนแบบ/งานละเอียด)</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-600">ความสว่างโคมไฟ (Lumens/ชุด):</label>
-          <input type="number" id="light-lumens" value="3600" class="w-full mt-1 p-2 border rounded-md" placeholder="เช่น 3600 lm สำหรับ LED Panel">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-600">กำลังไฟฟ้าต่อโคม (Watts):</label>
-          <input type="number" id="light-watts" value="36" class="w-full mt-1 p-2 border rounded-md">
-        </div>
+    <!-- PAGE 1: HOME SELECTION (หน้าหลักสำหรับเลือกโปรแกรม) -->
+    <div id="pageHome" class="space-y-3">
+      <div class="text-center text-xs font-semibold text-slate-300 mb-1">
+        กรุณาเลือกโปรแกรมที่ต้องการใช้งาน
       </div>
-      <button onclick="calcLighting()" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">คำนวณแสงสว่าง</button>
-      <div id="result-lighting" class="mt-4 p-4 bg-slate-50 rounded-md text-slate-700 hidden"></div>
+
+      <!-- Card 1: Cable & CB Sizing -->
+      <button 
+        onclick="showPage('sizing')" 
+        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-blue-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
+      >
+        <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+          ⚡
+        </div>
+        <div>
+          <h2 class="text-sm font-bold text-white group-hover:text-blue-400 transition">
+            คำนวณขนาดสายไฟ & เบรกเกอร์
+          </h2>
+          <p class="text-[11px] text-slate-400 mt-0.5">
+            คำนวณกระแสโหลด เลือกขนาดเบรกเกอร์ (CB) และขนาดสายไฟตามมาตรฐาน วสท.
+          </p>
+        </div>
+      </button>
+
+      <!-- Card 2: Voltage Drop Calculation -->
+      <button 
+        onclick="showPage('vd')" 
+        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-amber-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
+      >
+        <div class="w-12 h-12 rounded-xl bg-amber-600/20 border border-amber-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+          📉
+        </div>
+        <div>
+          <h2 class="text-sm font-bold text-white group-hover:text-amber-400 transition">
+            คำนวณ แรงดันตก (Voltage Drop)
+          </h2>
+          <p class="text-[11px] text-slate-400 mt-0.5">
+            เช็กเปอร์เซ็นต์แรงดันตก (% VD) ตามระยะทางเดินสายไฟ ป้องกันอุปกรณ์เสียหาย
+          </p>
+        </div>
+      </button>
+
+      <!-- Card 3: Lighting Calculation (ส่วนที่เพิ่มเข้ามาใหม่) -->
+      <button 
+        onclick="showPage('light')" 
+        class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-yellow-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
+      >
+        <div class="w-12 h-12 rounded-xl bg-yellow-600/20 border border-yellow-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition shrink-0">
+          💡
+        </div>
+        <div>
+          <h2 class="text-sm font-bold text-white group-hover:text-yellow-400 transition">
+            คำนวณระบบแสงสว่าง (Lighting)
+          </h2>
+          <p class="text-[11px] text-slate-400 mt-0.5">
+            คำนวณหาจำนวนหลอดไฟ ค่าความสว่าง (Lux) และการประหยัดพลังงานในห้องต่าง ๆ
+          </p>
+        </div>
+      </button>
     </div>
 
-    <!-- 2. TAB: WIRE SIZING CALCULATOR -->
-    <div id="tab-wire" class="tab-content hidden">
-      <h2 class="text-xl font-semibold mb-4 text-slate-700">คำนวณขนาดสายไฟและขนาดเบรกเกอร์</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label class="block text-sm font-medium text-slate-600">โหลดรวม (Watts):</label>
-          <input type="number" id="wire-power" value="3500" class="w-full mt-1 p-2 border rounded-md">
+    <!-- PAGE 2: CABLE & CB SIZING CALCULATOR -->
+    <div id="pageSizing" class="space-y-4 hidden">
+      <!-- Top Nav Back Button -->
+      <div class="flex items-center justify-between">
+        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
+          ←กลับหน้าหลัก
+        </button>
+        <span class="text-xs font-semibold text-blue-400">⚡ Cable & CB Sizing</span>
+      </div>
+
+      <!-- Main Input Card -->
+      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
+        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <span class="flex items-center gap-2"><span class="text-yellow-400">⚡</span> ระบุข้อมูลโหลดไฟฟ้า</span>
+        </h2>
+        
+        <!-- Load Type Switch -->
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button id="btnGeneral" type="button" onclick="setLoadType('general')" class="py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+            โหลดทั่วไป / แสงสว่าง
+          </button>
+          <button id="btnMotor" type="button" onclick="setLoadType('motor')" class="py-2.5 rounded-lg font-medium transition bg-slate-800/80 text-slate-300 hover:text-white">
+            โหลดมอเตอร์ / แอร์
+          </button>
         </div>
+
+        <!-- Power Input & Unit Selection -->
         <div>
-          <label class="block text-sm font-medium text-slate-600">ระบบไฟฟ้า:</label>
-          <select id="wire-phase" class="w-full mt-1 p-2 border rounded-md">
-            <option value="1">1 เฟส (220V)</option>
-            <option value="3">3 เฟส (380V)</option>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">กำลังไฟฟ้า / ขนาดโหลด:</label>
+          <div class="flex gap-2">
+            <input 
+              type="number" 
+              id="power" 
+              value="30" 
+              step="0.1"
+              oninput="calculateSizing()" 
+              class="flex-1 bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+            />
+            <select 
+              id="powerUnit" 
+              onchange="calculateSizing()" 
+              class="bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500 font-semibold"
+            >
+              <option value="kW">กิโลวัตต์ (kW)</option>
+              <option value="W">วัตต์ (W)</option>
+              <option value="HP">แรงม้า (HP)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Phase Selection -->
+        <div>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระบบไฟฟ้า (Phase):</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <button id="btnPhase1" type="button" onclick="setPhase('1')" class="py-2.5 rounded-lg transition bg-blue-600 text-white shadow-lg shadow-blue-600/30 font-medium">
+              1 เฟส (220V)
+            </button>
+            <button id="btnPhase3" type="button" onclick="setPhase('3')" class="py-2.5 rounded-lg transition bg-slate-800/80 text-slate-300 hover:text-white font-medium">
+              3 เฟส (380V)
+            </button>
+          </div>
+        </div>
+
+        <!-- ชนิดสายไฟ และ จำนวนแกน -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ชนิดสายไฟ:</label>
+            <select id="wireType" onchange="updateOptions()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
+              <option value="THW">THW (IEC 01)</option>
+              <option value="NYY">NYY</option>
+              <option value="VAF">VAF</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">จำนวนแกน:</label>
+            <select id="wireCores" onchange="calculateSizing()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
+              <option value="1">1 แกน (Single-Core)</option>
+              <option value="2">2 แกน (2-Core)</option>
+              <option value="3">3 แกน (3-Core)</option>
+              <option value="4">4 แกน (4-Core)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- วิธีการเดินสาย -->
+        <div>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">วิธีการเดินสาย:</label>
+          <select id="installMethod" onchange="calculateSizing()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
+            <option value="conduit">เดินในท่อร้อยสาย (Conduit)</option>
+            <option value="air">เดินลอยในอากาศ / เกาะผนัง</option>
+            <option value="underground">เดินฝังดินโดยตรง (Direct Buried)</option>
           </select>
         </div>
+
+        <!-- Power Factor -->
         <div>
-          <label class="block text-sm font-medium text-slate-600">Power Factor (PF):</label>
-          <input type="number" id="wire-pf" value="0.85" step="0.05" class="w-full mt-1 p-2 border rounded-md">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-slate-600">เผื่อขนาดกระแส (Safety Factor):</label>
-          <select id="wire-sf" class="w-full mt-1 p-2 border rounded-md">
-            <option value="1.25">125% (มาตรฐานโหลดต่อเนื่อง)</option>
-            <option value="1.0">100% (โหลดทั่วไป)</option>
-          </select>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">Power Factor (PF):</label>
+          <input 
+            type="number" 
+            id="pf" 
+            value="0.85" 
+            step="0.01" 
+            oninput="calculateSizing()" 
+            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 transition"
+          />
         </div>
       </div>
-      <button onclick="calcWire()" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">คำนวณขนาดสายไฟ</button>
-      <div id="result-wire" class="mt-4 p-4 bg-slate-50 rounded-md text-slate-700 hidden"></div>
+
+      <!-- Result Card -->
+      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
+        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณ (อ้างอิงมาตรฐาน วสท.)</div>
+        
+        <div>
+          <div class="text-xs text-slate-400 mb-1">กระแสโหลดใช้งานจริง (I_load)</div>
+          <div id="iLoad" class="text-3xl font-extrabold text-blue-400">0 A</div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800">
+          <div class="text-xs text-slate-400 mb-1">ขนาด Main CB ที่แนะนำ (In)</div>
+          <div id="cbSize" class="text-3xl font-extrabold text-red-500">0 A</div>
+        </div>
+
+        <!-- Single Cable Result -->
+        <div class="pt-3 border-t border-slate-800">
+          <div class="text-xs text-slate-400 mb-1">ขนาดสายไฟแนะนำ (สายเดี่ยว)</div>
+          <div id="wireSize" class="text-2xl font-bold text-emerald-400">0 ตร.มม.</div>
+          
+          <div class="mt-2 inline-block px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+            <span class="text-xs text-emerald-300">พิกัดทนกระแสสาย (Iz): </span>
+            <span id="wireCapacity" class="text-xs font-bold text-emerald-400">0 A</span>
+          </div>
+
+          <div id="wireDetail" class="text-xs text-slate-400 mt-2">-</div>
+        </div>
+
+        <!-- Parallel Run Recommendation -->
+        <div id="parallelBox" class="pt-3 border-t border-slate-800 hidden">
+          <div class="text-xs text-yellow-400 font-semibold mb-1 flex items-center justify-center gap-1">
+            <span>🔀</span> คำแนะนำทางเลือก: การเบิ้ลสาย (Parallel Runs)
+          </div>
+          <div id="parallelText" class="text-lg font-bold text-yellow-300 mt-1">2x (1x95 ตร.มม.)</div>
+          <div id="parallelCap" class="text-xs text-slate-300 mt-1">พิกัดทนกระแสรวม: 520 A</div>
+          <div class="text-[10px] text-slate-400 mt-1 leading-relaxed">
+            *การเดินเบิ้ลสายช่วยลดความแข็งในการดัดโค้งและลดขนาดท่อร้อยสาย
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- 3. TAB: VOLTAGE DROP CALCULATOR -->
-    <div id="tab-volt-drop" class="tab-content hidden">
-      <h2 class="text-xl font-semibold mb-4 text-slate-700">คำนวณแรงดันตกในสาย (Voltage Drop)</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <!-- PAGE 3: VOLTAGE DROP CALCULATOR -->
+    <div id="pageVD" class="space-y-4 hidden">
+      <!-- Top Nav Back Button -->
+      <div class="flex items-center justify-between">
+        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
+          ←กลับหน้าหลัก
+        </button>
+        <span class="text-xs font-semibold text-amber-400">📉 Voltage Drop Calculator</span>
+      </div>
+
+      <!-- Inputs -->
+      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
+        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <span class="flex items-center gap-2"><span class="text-amber-400">📐</span> ข้อมูลแรงดันและระยะทาง</span>
+        </h2>
+
+        <!-- Phase Selection VD -->
         <div>
-          <label class="block text-sm font-medium text-slate-600">กระแสไฟฟ้าในวงจร (Amps):</label>
-          <input type="number" id="vd-current" value="20" class="w-full mt-1 p-2 border rounded-md">
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระบบไฟฟ้า (Phase):</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <button id="btnVDPhase1" type="button" onclick="setVDPhase('1')" class="py-2.5 rounded-lg transition bg-amber-600 text-white shadow-lg shadow-amber-600/30 font-medium">
+              1 เฟส (220V)
+            </button>
+            <button id="btnVDPhase3" type="button" onclick="setVDPhase('3')" class="py-2.5 rounded-lg transition bg-slate-800/80 text-slate-300 hover:text-white font-medium">
+              3 เฟส (380V)
+            </button>
+          </div>
         </div>
+
+        <!-- Current (Amp) Input -->
         <div>
-          <label class="block text-sm font-medium text-slate-600">ความยาวสายไฟ - ไปกลับ (เมตร):</label>
-          <input type="number" id="vd-distance" value="50" class="w-full mt-1 p-2 border rounded-md">
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">กระแสไฟฟ้าที่ใช้งานจริง (Amp):</label>
+          <input 
+            type="number" 
+            id="vdCurrent" 
+            value="50" 
+            step="0.5" 
+            oninput="calculateVD()" 
+            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition"
+          />
         </div>
+
+        <!-- Wire Size Selection -->
         <div>
-          <label class="block text-sm font-medium text-slate-600">ขนาดสายไฟ (sq.mm.):</label>
-          <select id="vd-wiresize" class="w-full mt-1 p-2 border rounded-md">
-            <option value="1.5">1.5 sq.mm.</option>
-            <option value="2.5" selected>2.5 sq.mm.</option>
-            <option value="4">4 sq.mm.</option>
-            <option value="6">6 sq.mm.</option>
-            <option value="10">10 sq.mm.</option>
-            <option value="16">16 sq.mm.</option>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ขนาดสายไฟ (Copper / ตร.มม.):</label>
+          <select id="vdWireSize" onchange="calculateVD()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-amber-500 font-semibold">
+            <option value="1.5">1.5 ตร.มม.</option>
+            <option value="2.5">2.5 ตร.มม.</option>
+            <option value="4">4 ตร.มม.</option>
+            <option value="6">6 ตร.มม.</option>
+            <option value="10" selected>10 ตร.มม.</option>
+            <option value="16">16 ตร.มม.</option>
+            <option value="25">25 ตร.มม.</option>
+            <option value="35">35 ตร.มม.</option>
+            <option value="50">50 ตร.มม.</option>
+            <option value="70">70 ตร.มม.</option>
+            <option value="95">95 ตร.มม.</option>
+            <option value="120">120 ตร.มม.</option>
+            <option value="150">150 ตร.มม.</option>
+            <option value="185">185 ตร.มม.</option>
+            <option value="240">240 ตร.มม.</option>
+            <option value="300">300 ตร.มม.</option>
           </select>
         </div>
+
+        <!-- Distance Input -->
         <div>
-          <label class="block text-sm font-medium text-slate-600">แรงดันระบบ (Volts):</label>
-          <input type="number" id="vd-voltage" value="220" class="w-full mt-1 p-2 border rounded-md">
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระยะทางเดินสายไฟ (เมตร):</label>
+          <input 
+            type="number" 
+            id="vdDistance" 
+            value="50" 
+            step="1" 
+            oninput="calculateVD()" 
+            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition"
+          />
+        </div>
+
+        <!-- Power Factor VD -->
+        <div>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">Power Factor (PF):</label>
+          <input 
+            type="number" 
+            id="vdPf" 
+            value="0.85" 
+            step="0.01" 
+            oninput="calculateVD()" 
+            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition"
+          />
         </div>
       </div>
-      <button onclick="calcVoltageDrop()" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">คำนวณแรงดันตก</button>
-      <div id="result-volt-drop" class="mt-4 p-4 bg-slate-50 rounded-md text-slate-700 hidden"></div>
+
+      <!-- Result Card VD -->
+      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
+        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณ แรงดันตก (Voltage Drop)</div>
+
+        <div>
+          <div class="text-xs text-slate-400 mb-1">เปอร์เซ็นต์แรงดันตก (% Voltage Drop)</div>
+          <div id="vdPercentResult" class="text-4xl font-extrabold text-emerald-400">0.00 %</div>
+          <div id="vdStatusBadge" class="mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+            อยู่ในเกณฑ์มาตรฐาน (≤ 3%)
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800 text-left">
+          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+            <div class="text-[10px] text-slate-400">แรงดันที่ลดลง (VD)</div>
+            <div id="vdVoltageDropVal" class="text-base font-bold text-amber-400">0.00 V</div>
+          </div>
+          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+            <div class="text-[10px] text-slate-400">แรงดันปลายทางเหลือ (V_end)</div>
+            <div id="vdEndVoltage" class="text-base font-bold text-blue-400">0.00 V</div>
+          </div>
+        </div>
+
+        <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
+          * มาตรฐาน วสท. แนะนำแรงดันตกไม่เกิน <strong>3%</strong> สำหรับวงจรย่อย และไม่เกิน <strong>5%</strong> สำหรับรวมสายป้อนและวงจรย่อย
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: LIGHTING CALCULATOR (เพิ่มหน้าระบบคำนวณแสงสว่างเข้ามาใหม่) -->
+    <div id="pageLight" class="space-y-4 hidden">
+      <!-- Top Nav Back Button -->
+      <div class="flex items-center justify-between">
+        <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
+          ←กลับหน้าหลัก
+        </button>
+        <span class="text-xs font-semibold text-yellow-400">💡 Lighting Calculator</span>
+      </div>
+
+      <!-- Inputs -->
+      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
+        <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <span class="flex items-center gap-2"><span class="text-yellow-400">💡</span> ข้อมูลห้องและโคมไฟ</span>
+        </h2>
+
+        <!-- Room Type Preset -->
+        <div>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ประเภทห้อง / ค่าความสว่างเป้าหมาย:</label>
+          <select id="lightRoomType" onchange="updateLightTarget()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500 font-semibold">
+            <option value="150">ห้องเก็บของ / ทางเดิน (150 Lux)</option>
+            <option value="300">ห้องนั่งเล่น / ห้องพักผ่อน (300 Lux)</option>
+            <option value="350">ห้องประชุม (350 Lux)</option>
+            <option value="500" selected>สำนักงาน / ห้องทำงานทั่วไป (500 Lux)</option>
+            <option value="750">ห้องเขียนแบบ / งานละเอียด (750 Lux)</option>
+          </select>
+        </div>
+
+        <!-- Room Dimensions -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความกว้างห้อง (เมตร):</label>
+            <input 
+              type="number" 
+              id="lightWidth" 
+              value="4" 
+              step="0.5" 
+              oninput="calculateLighting()" 
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
+            />
+          </div>
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความยาวห้อง (เมตร):</label>
+            <input 
+              type="number" 
+              id="lightLength" 
+              value="6" 
+              step="0.5" 
+              oninput="calculateLighting()" 
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
+            />
+          </div>
+        </div>
+
+        <!-- Bulb Spec Preset -->
+        <div>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">เลือกประเภทโคมไฟสำเร็จรูป:</label>
+          <select id="lightBulbPreset" onchange="applyBulbPreset()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-yellow-500">
+            <option value="custom">กำหนดเอง (Custom Lumens/Watt)</option>
+            <option value="panel" selected>LED Panel 60x60cm (40W / 4,000 lm)</option>
+            <option value="tube">LED Tube T8 (18W / 1,800 lm)</option>
+            <option value="downlight">LED Downlight 4" (12W / 1,000 lm)</option>
+            <option value="bulb">LED Bulb E27 (9W / 810 lm)</option>
+          </select>
+        </div>
+
+        <!-- Lumens & Watt Input -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ความสว่างต่อชุด (Lumens):</label>
+            <input 
+              type="number" 
+              id="lightLumens" 
+              value="4000" 
+              step="100" 
+              oninput="calculateLighting()" 
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
+            />
+          </div>
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">กำลังไฟต่อชุด (Watts):</label>
+            <input 
+              type="number" 
+              id="lightWatts" 
+              value="40" 
+              step="1" 
+              oninput="calculateLighting()" 
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-500 transition"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card Lighting -->
+      <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
+        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณระบบแสงสว่าง (Lumen Method)</div>
+
+        <div>
+          <div class="text-xs text-slate-400 mb-1">จำนวนโคมไฟที่แนะนำ</div>
+          <div id="lightFixtureCount" class="text-4xl font-extrabold text-yellow-400">0 ชุด</div>
+          <div id="lightGridLayout" class="text-xs text-slate-300 mt-1 font-semibold">การจัดวาง: -</div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800 text-left">
+          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+            <div class="text-[10px] text-slate-400">พื้นที่ห้องรวม</div>
+            <div id="lightArea" class="text-base font-bold text-blue-400">0.00 ตร.ม.</div>
+          </div>
+          <div class="bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+            <div class="text-[10px] text-slate-400">กำลังไฟฟ้ารวม</div>
+            <div id="lightTotalWatts" class="text-base font-bold text-emerald-400">0 W</div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 text-left space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">ค่าความสว่างที่ได้จริง (Actual Lux):</span>
+            <span id="lightActualLux" class="font-bold text-white">0 Lux</span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">ความหนาแน่นพลังงาน (LPD):</span>
+            <span id="lightLPD" class="font-bold text-yellow-300">0 W/ตร.ม.</span>
+          </div>
+        </div>
+
+        <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
+          * คำนวณโดยใช้สัมประสิทธิ์การใช้ประโยชน์ (UF = 0.6) และปัจจัยการบำรุงรักษา (MF = 0.8) ตามมาตรฐานวิศวกรรมไฟฟ้า
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-[10px] text-slate-400 drop-shadow pt-2">
+      HICRETE Electrical Division Tool
     </div>
 
   </div>
 
   <script>
-    // Tab Control
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      
-      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-      event.target.classList.add('active');
+    // PAGE ROUTING LOGIC
+    function showPage(pageId) {
+      document.getElementById('pageHome').classList.add('hidden');
+      document.getElementById('pageSizing').classList.add('hidden');
+      document.getElementById('pageVD').classList.add('hidden');
+      document.getElementById('pageLight').classList.add('hidden');
+
+      if (pageId === 'home') {
+        document.getElementById('pageHome').classList.remove('hidden');
+      } else if (pageId === 'sizing') {
+        document.getElementById('pageSizing').classList.remove('hidden');
+        calculateSizing();
+      } else if (pageId === 'vd') {
+        document.getElementById('pageVD').classList.remove('hidden');
+        calculateVD();
+      } else if (pageId === 'light') {
+        document.getElementById('pageLight').classList.remove('hidden');
+        calculateLighting();
+      }
     }
 
-    // 1. Lighting Calculation
-    function calcLighting() {
-      const length = parseFloat(document.getElementById('light-length').value);
-      const width = parseFloat(document.getElementById('light-width').value);
-      const targetLux = parseFloat(document.getElementById('light-lux').value);
-      const lumens = parseFloat(document.getElementById('light-lumens').value);
-      const watts = parseFloat(document.getElementById('light-watts').value);
+    // ==========================================
+    // 1. CABLE & CB SIZING LOGIC
+    // ==========================================
+    let currentLoadType = 'general';
+    let currentPhase = '1';
 
-      const area = length * width;
+    const wireTable = [
+      { size: "1.5", conduit: 15,  air: 21,  underground: 21 },
+      { size: "2.5", conduit: 21,  air: 29,  underground: 29 },
+      { size: "4",   conduit: 28,  air: 38,  underground: 38 },
+      { size: "6",   conduit: 36,  air: 49,  underground: 49 },
+      { size: "10",  conduit: 50,  air: 68,  underground: 68 },
+      { size: "16",  conduit: 68,  air: 91,  underground: 91 },
+      { size: "25",  conduit: 89,  air: 121, underground: 121 },
+      { size: "35",  conduit: 111, air: 150, underground: 150 },
+      { size: "50",  conduit: 134, air: 183, underground: 183 },
+      { size: "70",  conduit: 171, air: 233, underground: 225 },
+      { size: "95",  conduit: 207, air: 282, underground: 270 },
+      { size: "120", conduit: 239, air: 328, underground: 310 },
+      { size: "150", conduit: 272, air: 375, underground: 350 },
+      { size: "185", conduit: 310, air: 430, underground: 395 },
+      { size: "240", conduit: 364, air: 510, underground: 460 },
+      { size: "300", conduit: 419, air: 590, underground: 520 },
+      { size: "400", conduit: 502, air: 715, underground: 600 },
+      { size: "500", conduit: 578, air: 830, underground: 680 }
+    ];
+
+    function setLoadType(type) {
+      currentLoadType = type;
+      const activeBtnClass = 'py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30';
+      const inactiveBtnClass = 'py-2.5 rounded-lg font-medium transition bg-slate-800/80 text-slate-300 hover:text-white';
+      
+      document.getElementById('btnGeneral').className = type === 'general' ? activeBtnClass : inactiveBtnClass;
+      document.getElementById('btnMotor').className = type === 'motor' ? activeBtnClass : inactiveBtnClass;
+      calculateSizing();
+    }
+
+    function setPhase(phase) {
+      currentPhase = phase;
+      const activeBtnClass = 'py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30';
+      const inactiveBtnClass = 'py-2.5 rounded-lg font-medium transition bg-slate-800/80 text-slate-300 hover:text-white';
+
+      document.getElementById('btnPhase1').className = phase === '1' ? activeBtnClass : inactiveBtnClass;
+      document.getElementById('btnPhase3').className = phase === '3' ? activeBtnClass : inactiveBtnClass;
+      
+      updateOptions();
+      calculateSizing();
+    }
+
+    function updateOptions() {
+      const wireType = document.getElementById('wireType').value;
+      const method = document.getElementById('installMethod');
+
+      if (wireType === 'VAF') {
+        method.value = 'air';
+        if (currentPhase === '3') {
+          alert('สาย VAF ไม่รองรับระบบไฟฟ้า 3 เฟส');
+          document.getElementById('wireType').value = 'THW';
+        }
+      }
+      calculateSizing();
+    }
+
+    function calculateSizing() {
+      const rawPower = parseFloat(document.getElementById('power').value) || 0;
+      const unit = document.getElementById('powerUnit').value;
+      const pfVal = parseFloat(document.getElementById('pf').value) || 0.85;
+      const v = currentPhase === '1' ? 220 : 380;
+      const wireType = document.getElementById('wireType').value;
+      const method = document.getElementById('installMethod').value;
+      const cores = document.getElementById('wireCores').value;
+
+      let powerInWatts = rawPower;
+      if (unit === 'kW') powerInWatts = rawPower * 1000;
+      else if (unit === 'HP') powerInWatts = rawPower * 746;
+
+      let iLoad = currentPhase === '1' 
+        ? powerInWatts / (v * pfVal)
+        : powerInWatts / (Math.sqrt(3) * v * pfVal);
+
+      if (currentLoadType === 'motor') iLoad = iLoad * 1.25;
+
+      const standardCBs = [10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250];
+      const targetCB = iLoad * 1.25;
+      let cbSize = standardCBs.find(cb => cb >= targetCB) || Math.ceil(targetCB);
+
+      let selectedWire = null;
+      for (let item of wireTable) {
+        if (item[method] >= cbSize) {
+          selectedWire = item;
+          break;
+        }
+      }
+
+      let methodText = "เดินในท่อร้อยสาย";
+      if (method === 'air') methodText = "เดินลอยในอากาศ / เกาะผนัง";
+      if (method === 'underground') methodText = "เดินฝังดินโดยตรง";
+
+      document.getElementById('iLoad').innerText = iLoad.toFixed(2) + ' A';
+      document.getElementById('cbSize').innerText = cbSize + ' A';
+
+      if (selectedWire) {
+        document.getElementById('wireSize').innerText = selectedWire.size + ' ตร.มม.';
+        document.getElementById('wireCapacity').innerText = selectedWire[method] + ' A';
+        document.getElementById('wireDetail').innerText = `สาย ${wireType} (${cores} แกน) ${methodText}`;
+      } else {
+        document.getElementById('wireSize').innerText = 'เกินขนาดสายเดี่ยว (500 Sq.mm)';
+        document.getElementById('wireCapacity').innerText = 'N/A';
+        document.getElementById('wireDetail').innerText = 'แนะนำให้ใช้ระบบเบิ้ลสายขนาน';
+      }
+
+      // Parallel Calculation
+      const parallelBox = document.getElementById('parallelBox');
+      if (cbSize >= 160 || (selectedWire && parseFloat(selectedWire.size) >= 70)) {
+        parallelBox.classList.remove('hidden');
+        const derating = 0.8;
+        const requiredCapPerRun = (cbSize / 2) / derating;
+        let parallelWire = wireTable.find(w => w[method] >= requiredCapPerRun);
+
+        if (parallelWire) {
+          const totalCapacity = Math.round(parallelWire[method] * 2 * derating);
+          document.getElementById('parallelText').innerText = `2x (1x${parallelWire.size} ตร.มม.) / เฟส`;
+          document.getElementById('parallelCap').innerText = `พิกัดทนกระแสรวม (คิดตัวคูณลด): ${totalCapacity} A`;
+        } else {
+          const requiredCapPerRun3 = (cbSize / 3) / derating;
+          let parallelWire3 = wireTable.find(w => w[method] >= requiredCapPerRun3);
+          if (parallelWire3) {
+            const totalCapacity = Math.round(parallelWire3[method] * 3 * derating);
+            document.getElementById('parallelText').innerText = `3x (1x${parallelWire3.size} ตร.มม.) / เฟส`;
+            document.getElementById('parallelCap').innerText = `พิกัดทนกระแสรวม (คิดตัวคูณลด): ${totalCapacity} A`;
+          } else {
+            document.getElementById('parallelText').innerText = `แนะนำปรับเพิ่มเส้นขนาน (3x หรือ 4x)`;
+            document.getElementById('parallelCap').innerText = `-`;
+          }
+        }
+      } else {
+        parallelBox.classList.add('hidden');
+      }
+    }
+
+    // ==========================================
+    // 2. VOLTAGE DROP LOGIC
+    // ==========================================
+    let currentVDPhase = '1';
+
+    const copperResistance = {
+      "1.5": 14.8,
+      "2.5": 8.91,
+      "4": 5.57,
+      "6": 3.71,
+      "10": 2.24,
+      "16": 1.41,
+      "25": 0.889,
+      "35": 0.641,
+      "50": 0.473,
+      "70": 0.328,
+      "95": 0.236,
+      "120": 0.188,
+      "150": 0.153,
+      "185": 0.123,
+      "240": 0.0947,
+      "300": 0.0758
+    };
+
+    function setVDPhase(phase) {
+      currentVDPhase = phase;
+      const activeBtnClass = 'py-2.5 rounded-lg transition bg-amber-600 text-white shadow-lg shadow-amber-600/30 font-medium';
+      const inactiveBtnClass = 'py-2.5 rounded-lg transition bg-slate-800/80 text-slate-300 hover:text-white font-medium';
+
+      document.getElementById('btnVDPhase1').className = phase === '1' ? activeBtnClass : inactiveBtnClass;
+      document.getElementById('btnVDPhase3').className = phase === '3' ? activeBtnClass : inactiveBtnClass;
+      
+      calculateVD();
+    }
+
+    function calculateVD() {
+      const i = parseFloat(document.getElementById('vdCurrent').value) || 0;
+      const wireSize = document.getElementById('vdWireSize').value;
+      const L = parseFloat(document.getElementById('vdDistance').value) || 0;
+      const pf = parseFloat(document.getElementById('vdPf').value) || 0.85;
+
+      const rPerKm = copperResistance[wireSize] || 1.41;
+      const rTotal = (rPerKm * (L / 1000));
+
+      let vNominal = currentVDPhase === '1' ? 220 : 380;
+      let vd = 0;
+
+      if (currentVDPhase === '1') {
+        vd = 2 * i * rTotal * pf;
+      } else {
+        vd = Math.sqrt(3) * i * rTotal * pf;
+      }
+
+      const vdPercent = (vd / vNominal) * 100;
+      const vEnd = vNominal - vd;
+
+      document.getElementById('vdVoltageDropVal').innerText = vd.toFixed(2) + ' V';
+      document.getElementById('vdEndVoltage').innerText = Math.max(0, vEnd).toFixed(2) + ' V';
+      document.getElementById('vdPercentResult').innerText = vdPercent.toFixed(2) + ' %';
+
+      const badge = document.getElementById('vdStatusBadge');
+      const percentText = document.getElementById('vdPercentResult');
+
+      if (vdPercent <= 3.0) {
+        badge.className = "mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+        badge.innerText = "อยู่ในเกณฑ์ดีเยี่ยม (≤ 3%)";
+        percentText.className = "text-4xl font-extrabold text-emerald-400";
+      } else if (vdPercent <= 5.0) {
+        badge.className = "mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/40";
+        badge.innerText = "ยอมรับได้สำหรับสายป้อน (3% - 5%)";
+        percentText.className = "text-4xl font-extrabold text-yellow-400";
+      } else {
+        badge.className = "mt-2 inline-block px-3 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/40";
+        badge.innerText = "แรงดันตกเกินมาตรฐาน (> 5%) - ควรเพิ่มขนาดสาย";
+        percentText.className = "text-4xl font-extrabold text-red-400";
+      }
+    }
+
+    // ==========================================
+    // 3. LIGHTING LOGIC (ระบบคำนวณแสงสว่างที่เพิ่มเข้ามา)
+    // ==========================================
+    function updateLightTarget() {
+      calculateLighting();
+    }
+
+    function applyBulbPreset() {
+      const preset = document.getElementById('lightBulbPreset').value;
+      const lumensInput = document.getElementById('lightLumens');
+      const wattsInput = document.getElementById('lightWatts');
+
+      if (preset === 'panel') {
+        lumensInput.value = 4000;
+        wattsInput.value = 40;
+      } else if (preset === 'tube') {
+        lumensInput.value = 1800;
+        wattsInput.value = 18;
+      } else if (preset === 'downlight') {
+        lumensInput.value = 1000;
+        wattsInput.value = 12;
+      } else if (preset === 'bulb') {
+        lumensInput.value = 810;
+        wattsInput.value = 9;
+      }
+      calculateLighting();
+    }
+
+    function calculateLighting() {
+      const targetLux = parseFloat(document.getElementById('lightRoomType').value) || 500;
+      const width = parseFloat(document.getElementById('lightWidth').value) || 0;
+      const length = parseFloat(document.getElementById('lightLength').value) || 0;
+      const lumens = parseFloat(document.getElementById('lightLumens').value) || 1;
+      const watts = parseFloat(document.getElementById('lightWatts').value) || 0;
+
+      const area = width * length;
       const UF = 0.6; // Utilization Factor
       const MF = 0.8; // Maintenance Factor
 
-      const totalLumens = (targetLux * area) / (UF * MF);
-      const count = Math.ceil(totalLumens / lumens);
-      const totalWatts = count * watts;
-      const lpd = (totalWatts / area).toFixed(2);
+      if (area <= 0 || lumens <= 0) return;
 
-      const resDiv = document.getElementById('result-lighting');
-      resDiv.classList.remove('hidden');
-      resDiv.innerHTML = `
-        <p class="font-bold text-lg text-blue-600 mb-2">ผลการคำนวณระบบแสงสว่าง:</p>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>พื้นที่ห้อง: <strong>${area.toFixed(2)} ตร.ม.</strong></li>
-          <li>จำนวนโคมไฟที่ต้องใช้: <strong class="text-emerald-600 text-xl">${count} ชุด</strong></li>
-          <li>กำลังไฟฟ้ารวม: <strong>${totalWatts} Watts</strong></li>
-          <li>ความหนาแน่นพลังงาน (LPD): <strong>${lpd} W/ตร.ม.</strong> ${lpd <= 9 ? '✅ (ประหยัดพลังงานดีเยี่ยม)' : '⚠️ (อยู่ในเกณฑ์มาตรฐาน)'}</li>
-        </ul>
-      `;
-    }
+      // Lumen Method Formula: N = (E * A) / (Lumens * UF * MF)
+      const totalLumensNeeded = (targetLux * area) / (UF * MF);
+      const fixtureCount = Math.ceil(totalLumensNeeded / lumens);
+      const totalWatts = fixtureCount * watts;
 
-    // 2. Wire Sizing Calculation
-    function calcWire() {
-      const watts = parseFloat(document.getElementById('wire-power').value);
-      const phase = parseInt(document.getElementById('wire-phase').value);
-      const pf = parseFloat(document.getElementById('wire-pf').value);
-      const sf = parseFloat(document.getElementById('wire-sf').value);
+      // Actual Lux achieved
+      const actualLux = (fixtureCount * lumens * UF * MF) / area;
+      const lpd = totalWatts / area; // Lighting Power Density (W/m²)
 
-      let current = 0;
-      if (phase === 1) {
-        current = watts / (220 * pf);
-      } else {
-        current = watts / (Math.sqrt(3) * 380 * pf);
-      }
+      // Calculate Grid Layout
+      const aspectRatio = length / width;
+      let cols = Math.round(Math.sqrt(fixtureCount * aspectRatio));
+      cols = Math.max(1, cols);
+      let rows = Math.ceil(fixtureCount / cols);
 
-      const designCurrent = current * sf;
-
-      // ตารางขนาดสาย IEC 01 เทียบกับพิกัดกระแสแบบคร่าวๆ (เดินในท่อ)
-      const wireTable = [
-        { size: 1.5, maxAmp: 14 },
-        { size: 2.5, maxAmp: 18 },
-        { size: 4, maxAmp: 25 },
-        { size: 6, maxAmp: 32 },
-        { size: 10, maxAmp: 44 },
-        { size: 16, maxAmp: 59 },
-        { size: 25, maxAmp: 78 }
-      ];
-
-      let recWire = wireTable.find(w => w.maxAmp >= designCurrent) || { size: '>25', maxAmp: 'N/A' };
-      let recBreaker = Math.ceil(designCurrent / 5) * 5; // ปรับขนาดเบรกเกอร์ตามมาตรฐาน
-
-      const resDiv = document.getElementById('result-wire');
-      resDiv.classList.remove('hidden');
-      resDiv.innerHTML = `
-        <p class="font-bold text-lg text-blue-600 mb-2">ผลการคำนวณขนาดสายไฟ:</p>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>กระแสไฟฟ้าใช้งาน (IB): <strong>${current.toFixed(2)} A</strong></li>
-          <li>กระแสออกแบบ (In = IB x ${sf}): <strong>${designCurrent.toFixed(2)} A</strong></li>
-          <li>ขนาดสายทองแดงแนะนำ (THW / IEC 01): <strong class="text-emerald-600 text-xl">${recWire.size} sq.mm.</strong> (ทนกระแสได้ ${recWire.maxAmp}A)</li>
-          <li>ขนาด Main Breaker แนะนำ: <strong>${recBreaker} A</strong></li>
-        </ul>
-      `;
-    }
-
-    // 3. Voltage Drop Calculation
-    function calcVoltageDrop() {
-      const current = parseFloat(document.getElementById('vd-current').value);
-      const distance = parseFloat(document.getElementById('vd-distance').value);
-      const wireSize = parseFloat(document.getElementById('vd-wiresize').value);
-      const vSystem = parseFloat(document.getElementById('vd-voltage').value);
-
-      // ความต้านทานสายทองแดงประมาณค่า (Ohm/km)
-      const resTable = { 1.5: 14.8, 2.5: 8.87, 4: 5.52, 6: 3.69, 10: 2.19, 16: 1.38 };
-      const resistance = resTable[wireSize] || 1.0;
-
-      // VD = 2 x I x L x R / 1000 (สำหรับ 1-Phase)
-      const vDrop = (2 * current * distance * (resistance / 1000));
-      const vDropPercent = (vDrop / vSystem) * 100;
-
-      const resDiv = document.getElementById('result-volt-drop');
-      resDiv.classList.remove('hidden');
-      resDiv.innerHTML = `
-        <p class="font-bold text-lg text-blue-600 mb-2">ผลการคำนวณแรงดันตก:</p>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>แรงดันตกในสาย (Voltage Drop): <strong>${vDrop.toFixed(2)} Volts</strong></li>
-          <li>คิดเป็นเปอร์เซ็นต์: <strong class="${vDropPercent <= 3 ? 'text-emerald-600' : 'text-red-600'} text-xl">${vDropPercent.toFixed(2)}%</strong></li>
-          <li>แรงดันปลายสายที่เหลือ: <strong>${(vSystem - vDrop).toFixed(2)} Volts</strong></li>
-          <li>สถานะมาตรฐาน (NEC/วสท. ไม่เกิน 3%): 
-            <strong>${vDropPercent <= 3 ? '✅ ผ่านเกณฑ์มาตรฐาน' : '❌ แรงดันตกเกินมาตรฐาน (แนะนำเพิ่มขนาดสาย)'}</strong>
-          </li>
-        </ul>
-      `;
+      // Render Outputs
+      document.getElementById('lightFixtureCount').innerText = fixtureCount + ' ชุด';
+      document.getElementById('lightGridLayout').innerText = `จัดวางแนะนำ: ${rows} แถว × ${cols} คอลัมน์`;
+      document.getElementById('lightArea').innerText = area.toFixed(2) + ' ตร.ม.';
+      document.getElementById('lightTotalWatts').innerText = totalWatts + ' W';
+      document.getElementById('lightActualLux').innerText = Math.round(actualLux) + ' Lux';
+      document.getElementById('lightLPD').innerText = lpd.toFixed(2) + ' W/ตร.ม.';
     }
   </script>
 </body>
