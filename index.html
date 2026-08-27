@@ -342,7 +342,7 @@
             <option value="70">70 ตร.มม.</option>
             <option value="95">95 ตร.มม.</option>
             <option value="120">120 ตร.มม.</option>
-            <option value="150">150 ตร.มม me.</option>
+            <option value="150">150 ตร.มม.</option>
             <option value="185">185 ตร.มม.</option>
             <option value="240">240 ตร.มม.</option>
             <option value="300">300 ตร.มม.</option>
@@ -816,7 +816,7 @@
       </div>
     </div>
 
-    <!-- PAGE 7: GENERATOR SIZING CALCULATOR (อัปเดตเพิ่มสายไฟ & ระยะทาง) -->
+    <!-- PAGE 7: GENERATOR SIZING CALCULATOR -->
     <div id="pageGen" class="space-y-4 hidden">
       <div class="flex items-center justify-between">
         <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
@@ -902,7 +902,7 @@
           </select>
         </div>
 
-        <!-- ข้อมูลเดินสายไฟที่เพิ่มเข้ามา -->
+        <!-- ข้อมูลเดินสายไฟ -->
         <div class="pt-2 border-t border-slate-800 space-y-3">
           <div class="text-xs font-semibold text-orange-400 flex items-center gap-1.5">
             <span>📏</span> ระยะทางเดินสาย และขนาดสายไฟ (Generator Wiring)
@@ -924,19 +924,7 @@
             <label class="text-xs text-slate-200 block mb-1.5 font-medium">ขนาดสายไฟที่เลือกใช้งาน (Sq.mm):</label>
             <select id="genWireSizeSelect" onchange="calculateGen()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-orange-500 font-semibold">
               <option value="auto" selected>✨ แนะนำขนาดสายอัตโนมัติ (Auto Match)</option>
-              <option value="6">6 ตร.มม.</option>
-              <option value="10">10 ตร.มม.</option>
-              <option value="16">16 ตร.มม.</option>
-              <option value="25">25 ตร.มม.</option>
-              <option value="35">35 ตร.มม.</option>
-              <option value="50">50 ตร.มม.</option>
-              <option value="70">70 ตร.มม.</option>
-              <option value="95">95 ตร.มม.</option>
-              <option value="120">120 ตร.มม.</option>
-              <option value="150">150 ตร.มม.</option>
-              <option value="185">185 ตร.มม.</option>
-              <option value="240">240 ตร.มม.</option>
-              <option value="300">300 ตร.มม.</option>
+              <!-- ตัวเลือกขนาดสายจะถูกกรองและอัปเดตอัตโนมัติผ่าน JavaScript -->
             </select>
           </div>
         </div>
@@ -1515,7 +1503,7 @@
     }
 
     // ==========================================
-    // 6. GENERATOR SIZING LOGIC (อัปเดตคำนวณสายไฟ & VD)
+    // 6. GENERATOR SIZING LOGIC (ตัดขนาดสายที่เล็กกว่าออก)
     // ==========================================
     let currentGenPhase = '3';
 
@@ -1537,7 +1525,8 @@
       const safetyMargin = parseFloat(document.getElementById('genSafetyMargin').value) || 1.2;
       const startFactor = parseFloat(document.getElementById('genStartFactor').value) || 1.0;
       const distance = parseFloat(document.getElementById('genDistance').value) || 0;
-      const userWireSize = document.getElementById('genWireSizeSelect').value;
+      const wireSelectElem = document.getElementById('genWireSizeSelect');
+      const currentUserWire = wireSelectElem.value;
       const v = currentGenPhase === '1' ? 220 : 380;
 
       let kw = 0;
@@ -1575,35 +1564,65 @@
       let estimatedFuel = kw * 0.25;
 
       // ------------------------------------------
-      // Wiring & Voltage Drop Calculation
+      // Dynamic Wire Filtering & Selection Logic
       // ------------------------------------------
-      let requiredAmp = fullAmp * 1.25; // Standard 125% for feeder wire sizing
-      let chosenWireSize = "6";
+      let requiredAmp = fullAmp * 1.25; // 125% ของกระแสโหลดเต็มพิกัด
 
-      if (userWireSize === 'auto') {
-        let matchWire = wireTable.find(w => w.air >= requiredAmp);
-        if (matchWire) {
-          chosenWireSize = matchWire.size;
-        } else {
-          chosenWireSize = "300"; // Fallback to maximum standard size
+      // กรองและสร้างตัวเลือกใน Drop-down เฉพาะขนาดที่รับโหลดและคุม VD ได้ (VD <= 5%)
+      let availableWires = [];
+      let autoMatchedWire = null;
+
+      for (let item of wireTable) {
+        let sizeStr = item.size;
+        let airCapacity = item.air; // ใช้เกณฑ์พิกัดทนกระแสเดินลอยในอากาศ/เกาะผนัง
+
+        // เช็กว่าพิกัดกระแสทนได้ และขนาดสายเพียงพอ
+        if (airCapacity >= requiredAmp) {
+          // ทดสอบคำนวณ % VD
+          let rPerKm = copperResistance[sizeStr] || 1.41;
+          let rTotal = (rPerKm * (distance / 1000));
+          let testVd = (currentGenPhase === '1') 
+            ? (2 * fullAmp * rTotal * pf) 
+            : (Math.sqrt(3) * fullAmp * rTotal * pf);
+          let testVdPercent = (testVd / v) * 100;
+
+          // เงื่อนไขผ่าน: กระแสผ่าน และแรงดันตกไม่เกิน 5%
+          if (testVdPercent <= 5.0) {
+            availableWires.push({ size: sizeStr, capacity: airCapacity, vd: testVdPercent });
+            if (!autoMatchedWire) {
+              autoMatchedWire = sizeStr; // ตัวเลือกที่เล็กที่สุดที่ผ่านเกณฑ์ จะถูกตั้งเป็น Auto แนะนำ
+            }
+          }
         }
-      } else {
-        chosenWireSize = userWireSize;
       }
 
-      // Calculate Voltage Drop on chosen wire
+      // กรณีโหลดสูงหรือระยะทางไกลมากจนตารางปกติไม่พอ ให้ดึงขนาดใหญ่สุดมาสำรอง
+      if (availableWires.length === 0) {
+        let lastItem = wireTable[wireTable.length - 1];
+        availableWires.push({ size: lastItem.size, capacity: lastItem.air, vd: 0 });
+        autoMatchedWire = lastItem.size;
+      }
+
+      // อัปเดต HTML Dropdown ให้แสดงเฉพาะขนาดที่ผ่านเกณฑ์เท่านั้น
+      wireSelectElem.innerHTML = `<option value="auto">✨ แนะนำขนาดสายอัตโนมัติ (${autoMatchedWire ? autoMatchedWire + ' ตร.มม.' : '-'})</option>`;
+      availableWires.forEach(w => {
+        let isSelected = (currentUserWire === w.size) ? 'selected' : '';
+        wireSelectElem.innerHTML += `<option value="${w.size}" ${isSelected}>${w.size} ตร.มม. (ทนกระแส ${w.capacity}A, VD ${w.vd.toFixed(1)}% )</option>`;
+      });
+
+      // กำหนดขนาดสายใช้งานจริง
+      let chosenWireSize = autoMatchedWire;
+      if (currentUserWire !== 'auto' && availableWires.some(w => w.size === currentUserWire)) {
+        chosenWireSize = currentUserWire;
+      }
+
+      // คำนวณ % VD ของสายที่เลือกใช้งานจริง
       const rPerKm = copperResistance[chosenWireSize] || 1.41;
       const rTotal = (rPerKm * (distance / 1000));
-      let vd = 0;
-
-      if (currentGenPhase === '1') {
-        vd = 2 * fullAmp * rTotal * pf;
-      } else {
-        vd = Math.sqrt(3) * fullAmp * rTotal * pf;
-      }
-
+      let vd = (currentGenPhase === '1') ? (2 * fullAmp * rTotal * pf) : (Math.sqrt(3) * fullAmp * rTotal * pf);
       let vdPercent = (vd / v) * 100;
 
+      // แสดงผลลัพธ์
       document.getElementById('genRecKVA').innerText = stdKVA.toLocaleString() + ' kVA';
       document.getElementById('genRecKW').innerText = `( ${stdKW.toLocaleString()} kW )`;
       document.getElementById('genFullAmp').innerText = fullAmp.toFixed(1) + ' A';
@@ -1611,7 +1630,6 @@
       document.getElementById('genRunKW').innerText = kw.toFixed(1) + ' kW';
       document.getElementById('genFuelCons').innerText = '~' + estimatedFuel.toFixed(1) + ' ลิตร/ชม.';
 
-      // Render Wire & VD Results
       document.getElementById('genWireResult').innerText = chosenWireSize + ' ตร.มม.';
       document.getElementById('genVDResult').innerText = vdPercent.toFixed(2) + '% (' + vd.toFixed(1) + ' V)';
 
@@ -1623,7 +1641,7 @@
         vdStatus.innerText = "* แรงดันตกยอมรับได้ (3% - 5%)";
         vdStatus.className = "text-[10px] text-yellow-400 font-medium";
       } else {
-        vdStatus.innerText = "* แรงดันตกเกิน 5%! แนะนำให้ปรับเพิ่มขนาดสายไฟขึ้นอีก 1-2 สเต็ป";
+        vdStatus.innerText = "* แรงดันตกเกิน 5%! แนะนำให้ปรับเพิ่มขนาดสายไฟขึ้นอีก";
         vdStatus.className = "text-[10px] text-red-400 font-medium font-bold";
       }
     }
