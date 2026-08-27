@@ -137,7 +137,7 @@
         </div>
       </button>
 
-      <!-- Card 6: Generator Sizing Calculator (ส่วนที่เพิ่มใหม่) -->
+      <!-- Card 6: Generator Sizing Calculator -->
       <button 
         onclick="showPage('gen')" 
         class="w-full bg-slate-900/85 backdrop-blur-md p-4 rounded-2xl border border-slate-700/60 shadow-xl hover:border-orange-500 hover:bg-slate-800/90 transition text-left flex items-center gap-4 group"
@@ -150,7 +150,7 @@
             คำนวณขนาดเครื่องปั่นไฟ (Generator)
           </h2>
           <p class="text-[11px] text-slate-400 mt-0.5">
-            หาขนาด kVA/kW ที่เหมาะสม รองรับกระแสกระชาก (Inrush) พร้อมประเมินน้ำมันเชื้อเพลิง
+            หาขนาด kVA/kW พร้อมคำนวณขนาดสายไฟและระยะทางเดินสายไฟ (VD %)
           </p>
         </div>
       </button>
@@ -342,7 +342,7 @@
             <option value="70">70 ตร.มม.</option>
             <option value="95">95 ตร.มม.</option>
             <option value="120">120 ตร.มม.</option>
-            <option value="150">150 ตร.มม.</option>
+            <option value="150">150 ตร.มม me.</option>
             <option value="185">185 ตร.มม.</option>
             <option value="240">240 ตร.มม.</option>
             <option value="300">300 ตร.มม.</option>
@@ -433,7 +433,7 @@
             <option value="350">ห้องประชุม / คลินิก (350 Lux)</option>
             <option value="500" selected>สำนักงาน / ห้องทำงานทั่วไป / ห้องเรียน (500 Lux)</option>
             <option value="750">ห้องเขียนแบบ / ห้องตรวจโรค / งานประกอบละเอียด (750 Lux)</option>
-            <option value="1000">ห้องผ่าตัด / งานตรวจสอบคุณภาพละเอียดสูง (1000 Lux)</option>
+            <option value="1000">ห้องผ่าตัด / งานตรวจสอบคุณภาพรายละเอียดสูง (1000 Lux)</option>
           </select>
         </div>
 
@@ -816,7 +816,7 @@
       </div>
     </div>
 
-    <!-- PAGE 7: GENERATOR SIZING CALCULATOR (ส่วนที่เพิ่มใหม่) -->
+    <!-- PAGE 7: GENERATOR SIZING CALCULATOR (อัปเดตเพิ่มสายไฟ & ระยะทาง) -->
     <div id="pageGen" class="space-y-4 hidden">
       <div class="flex items-center justify-between">
         <button onclick="showPage('home')" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700/50">
@@ -828,7 +828,7 @@
       <!-- Input Card -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
         <h2 class="text-sm font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2.5">
-          <span class="flex items-center gap-2"><span class="text-orange-400">⚙️</span> ระบุข้อมูลโหลดเครื่องปั่นไฟ</span>
+          <span class="flex items-center gap-2"><span class="text-orange-400">⚙️</span> ข้อมูลโหลดและระยะสายไฟ</span>
         </h2>
 
         <div>
@@ -884,28 +884,67 @@
           <div>
             <label class="text-xs text-slate-200 block mb-1.5 font-medium">เผื่อสำรอง (Safety Factor):</label>
             <select id="genSafetyMargin" onchange="calculateGen()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-orange-500">
-              <option value="1.10">10% (โหลดนิ่ง / โหลดทั่วไป)</option>
+              <option value="1.10">10% (โหลดนิ่ง)</option>
               <option value="1.20" selected>20% (มาตรฐานเผื่ออนาคต)</option>
               <option value="1.25">25% (โหลดทำงานต่อเนื่อง 24 ชม.)</option>
-              <option value="1.30">30% (งานสนาม / ไซต์ก่อสร้าง)</option>
+              <option value="1.30">30% (งานสนาม / ไซต์งาน)</option>
             </select>
           </div>
         </div>
 
         <div>
-          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ลักษณะการสตาร์ทโหลด (Starting Inrush Factor):</label>
+          <label class="text-xs text-slate-200 block mb-1.5 font-medium">ลักษณะการสตาร์ท (Starting Factor):</label>
           <select id="genStartFactor" onchange="calculateGen()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-orange-500 font-semibold">
             <option value="1.0" selected>โหลดทั่วไป / มี Inverter / Soft Starter (1.0x)</option>
             <option value="1.25">แอร์ / ปั๊มน้ำขนาดเล็ก / มอเตอร์ Star-Delta (1.25x)</option>
             <option value="1.50">มอเตอร์ Direct Online (DOL) / เครื่องจักรหนัก (1.50x)</option>
-            <option value="2.00">มอเตอร์สตาร์ทพร้อมกันหลายเครื่อง / โหลดกระชากสูงมาก (2.00x)</option>
+            <option value="2.00">มอเตอร์สตาร์ทพร้อมกันหลายเครื่อง (2.00x)</option>
           </select>
+        </div>
+
+        <!-- ข้อมูลเดินสายไฟที่เพิ่มเข้ามา -->
+        <div class="pt-2 border-t border-slate-800 space-y-3">
+          <div class="text-xs font-semibold text-orange-400 flex items-center gap-1.5">
+            <span>📏</span> ระยะทางเดินสาย และขนาดสายไฟ (Generator Wiring)
+          </div>
+
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระยะทางจากเครื่องปั่นไฟถึงตู้โหลด (เมตร):</label>
+            <input 
+              type="number" 
+              id="genDistance" 
+              value="30" 
+              step="1" 
+              oninput="calculateGen()" 
+              class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-orange-500 transition"
+            />
+          </div>
+
+          <div>
+            <label class="text-xs text-slate-200 block mb-1.5 font-medium">ขนาดสายไฟที่เลือกใช้งาน (Sq.mm):</label>
+            <select id="genWireSizeSelect" onchange="calculateGen()" class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-orange-500 font-semibold">
+              <option value="auto" selected>✨ แนะนำขนาดสายอัตโนมัติ (Auto Match)</option>
+              <option value="6">6 ตร.มม.</option>
+              <option value="10">10 ตร.มม.</option>
+              <option value="16">16 ตร.มม.</option>
+              <option value="25">25 ตร.มม.</option>
+              <option value="35">35 ตร.มม.</option>
+              <option value="50">50 ตร.มม.</option>
+              <option value="70">70 ตร.มม.</option>
+              <option value="95">95 ตร.มม.</option>
+              <option value="120">120 ตร.มม.</option>
+              <option value="150">150 ตร.มม.</option>
+              <option value="185">185 ตร.มม.</option>
+              <option value="240">240 ตร.มม.</option>
+              <option value="300">300 ตร.มม.</option>
+            </select>
+          </div>
         </div>
       </div>
 
       <!-- Result Card -->
       <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 text-center shadow-2xl">
-        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณพิกัดเครื่องปั่นไฟ (Generator Sizing)</div>
+        <div class="text-xs text-slate-300 font-medium">📊 ผลการคำนวณพิกัดเครื่องปั่นไฟและขนาดสายไฟ</div>
 
         <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
           <div class="text-xs text-slate-400 mb-1">ขนาดเครื่องปั่นไฟแนะนำ (Recommended Generator)</div>
@@ -913,13 +952,30 @@
           <div id="genRecKW" class="text-sm font-bold text-amber-300 mt-1">( 0 kW )</div>
         </div>
 
+        <!-- Cable Recommendation Output -->
+        <div class="p-3.5 rounded-xl border border-orange-500/30 bg-orange-950/20 text-left space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-orange-300 flex items-center gap-1.5">
+              <span>🔌</span> ขนาดสายไฟแนะนำ:
+            </span>
+            <span id="genWireResult" class="text-sm font-extrabold text-emerald-400">0 ตร.มม.</span>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-1 border-t border-slate-800/80">
+            <span class="text-slate-400">แรงดันตกตามระยะทาง (Voltage Drop):</span>
+            <span id="genVDResult" class="font-bold text-white">0.00 % (0.0 V)</span>
+          </div>
+          <div id="genVDStatus" class="text-[10px] text-emerald-400 font-medium">
+            * แรงดันตกอยู่ในเกณฑ์ยอมรับได้
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-2 text-left text-xs">
           <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">กระแสไฟฟ้ารวม (Full Load Current):</span>
+            <span class="text-[10px] text-slate-400 block">กระแสไฟฟ้ารวม (Full Load Amp):</span>
             <span id="genFullAmp" class="font-bold text-blue-400">0 A</span>
           </div>
           <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <span class="text-[10px] text-slate-400 block">กระแสเผื่อสตาร์ท (Peak Current):</span>
+            <span class="text-[10px] text-slate-400 block">กระแสเผื่อสตาร์ท (Peak Amp):</span>
             <span id="genPeakAmp" class="font-bold text-red-400">0 A</span>
           </div>
           <div class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
@@ -933,7 +989,7 @@
         </div>
 
         <div class="text-[10px] text-slate-400 text-left bg-slate-950/40 p-2.5 rounded-lg leading-relaxed">
-          * การคำนวณคิดจาก Standby/Prime Rating ที่อัตรา PF 0.8 และประเมินการกินน้ำมันดีเซลเฉลี่ยที่ภาระโหลด 75% (~0.25 ลิตร/kWh)
+          * การคำนวณสายไฟจะเลือกขนาดที่ทนกระแสกระชากและรักษาระดับแรงดันตกไม่ให้เกิน 3%-5% ตามระยะทางเพื่อป้องกันเครื่องปั่นไฟตัดการทำงาน
         </div>
       </div>
     </div>
@@ -1017,8 +1073,8 @@
 
     function setPhase(phase) {
       currentPhase = phase;
-      const activeBtnClass = 'py-2.5 rounded-lg font-medium transition bg-blue-600 text-white shadow-lg shadow-blue-600/30';
-      const inactiveBtnClass = 'py-2.5 rounded-lg font-medium transition bg-slate-800/80 text-slate-300 hover:text-white';
+      const activeBtnClass = 'py-2.5 rounded-lg transition bg-blue-600 text-white shadow-lg shadow-blue-600/30';
+      const inactiveBtnClass = 'py-2.5 rounded-lg transition bg-slate-800/80 text-slate-300 hover:text-white';
 
       document.getElementById('btnPhase1').className = phase === '1' ? activeBtnClass : inactiveBtnClass;
       document.getElementById('btnPhase3').className = phase === '3' ? activeBtnClass : inactiveBtnClass;
@@ -1459,7 +1515,7 @@
     }
 
     // ==========================================
-    // 6. GENERATOR SIZING LOGIC (ส่วนที่เพิ่มใหม่)
+    // 6. GENERATOR SIZING LOGIC (อัปเดตคำนวณสายไฟ & VD)
     // ==========================================
     let currentGenPhase = '3';
 
@@ -1480,12 +1536,13 @@
       const pf = parseFloat(document.getElementById('genPf').value) || 0.8;
       const safetyMargin = parseFloat(document.getElementById('genSafetyMargin').value) || 1.2;
       const startFactor = parseFloat(document.getElementById('genStartFactor').value) || 1.0;
+      const distance = parseFloat(document.getElementById('genDistance').value) || 0;
+      const userWireSize = document.getElementById('genWireSizeSelect').value;
       const v = currentGenPhase === '1' ? 220 : 380;
 
       let kw = 0;
       let kva = 0;
 
-      // Convert unit to kW & kVA
       if (unit === 'kW') {
         kw = rawPower;
         kva = kw / pf;
@@ -1504,23 +1561,48 @@
         kw = kva * pf;
       }
 
-      // Full Load Amp
       let fullAmp = currentGenPhase === '1'
         ? (kva * 1000) / 220
         : (kva * 1000) / (Math.sqrt(3) * 380);
 
-      // Apply Inrush & Safety Margin
       let recKVA = kva * startFactor * safetyMargin;
       
-      // Standard Commercial Generator Rating Snap
       const genRatings = [5, 10, 15, 20, 25, 30, 45, 60, 75, 100, 125, 150, 200, 250, 300, 350, 400, 500, 600, 750, 800, 1000, 1250, 1500, 2000];
       let stdKVA = genRatings.find(g => g >= recKVA) || Math.ceil(recKVA / 50) * 50;
-      let stdKW = stdKVA * 0.8; // Generator standard rated PF is usually 0.8
+      let stdKW = stdKVA * 0.8;
 
       let peakAmp = fullAmp * startFactor;
-
-      // Fuel consumption estimate (Roughly 0.25 Liters per kWh at 75% load)
       let estimatedFuel = kw * 0.25;
+
+      // ------------------------------------------
+      // Wiring & Voltage Drop Calculation
+      // ------------------------------------------
+      let requiredAmp = fullAmp * 1.25; // Standard 125% for feeder wire sizing
+      let chosenWireSize = "6";
+
+      if (userWireSize === 'auto') {
+        let matchWire = wireTable.find(w => w.air >= requiredAmp);
+        if (matchWire) {
+          chosenWireSize = matchWire.size;
+        } else {
+          chosenWireSize = "300"; // Fallback to maximum standard size
+        }
+      } else {
+        chosenWireSize = userWireSize;
+      }
+
+      // Calculate Voltage Drop on chosen wire
+      const rPerKm = copperResistance[chosenWireSize] || 1.41;
+      const rTotal = (rPerKm * (distance / 1000));
+      let vd = 0;
+
+      if (currentGenPhase === '1') {
+        vd = 2 * fullAmp * rTotal * pf;
+      } else {
+        vd = Math.sqrt(3) * fullAmp * rTotal * pf;
+      }
+
+      let vdPercent = (vd / v) * 100;
 
       document.getElementById('genRecKVA').innerText = stdKVA.toLocaleString() + ' kVA';
       document.getElementById('genRecKW').innerText = `( ${stdKW.toLocaleString()} kW )`;
@@ -1528,6 +1610,22 @@
       document.getElementById('genPeakAmp').innerText = peakAmp.toFixed(1) + ' A';
       document.getElementById('genRunKW').innerText = kw.toFixed(1) + ' kW';
       document.getElementById('genFuelCons').innerText = '~' + estimatedFuel.toFixed(1) + ' ลิตร/ชม.';
+
+      // Render Wire & VD Results
+      document.getElementById('genWireResult').innerText = chosenWireSize + ' ตร.มม.';
+      document.getElementById('genVDResult').innerText = vdPercent.toFixed(2) + '% (' + vd.toFixed(1) + ' V)';
+
+      const vdStatus = document.getElementById('genVDStatus');
+      if (vdPercent <= 3.0) {
+        vdStatus.innerText = "* แรงดันตกอยู่ในเกณฑ์ดีเยี่ยม (≤ 3%)";
+        vdStatus.className = "text-[10px] text-emerald-400 font-medium";
+      } else if (vdPercent <= 5.0) {
+        vdStatus.innerText = "* แรงดันตกยอมรับได้ (3% - 5%)";
+        vdStatus.className = "text-[10px] text-yellow-400 font-medium";
+      } else {
+        vdStatus.innerText = "* แรงดันตกเกิน 5%! แนะนำให้ปรับเพิ่มขนาดสายไฟขึ้นอีก 1-2 สเต็ป";
+        vdStatus.className = "text-[10px] text-red-400 font-medium font-bold";
+      }
     }
   </script>
 </body>
