@@ -17,6 +17,8 @@
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tesseract.js (Free Engine for Nameplate OCR Scanning) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 <body class="min-h-screen text-slate-100 flex items-center justify-center p-4 relative overflow-x-hidden bg-slate-950">
 
@@ -128,9 +130,37 @@
 
     <!-- Main Card Input -->
     <div class="bg-slate-900/85 backdrop-blur-md p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-2xl">
-      <h2 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-2">
-        <span class="text-yellow-400">⚡</span> คำนวณขนาดสายไฟ & CB
+      <h2 class="text-base font-bold text-white flex items-center justify-between border-b border-slate-800 pb-2">
+        <span class="flex items-center gap-2"><span class="text-yellow-400">⚡</span> คำนวณขนาดสายไฟ & CB</span>
       </h2>
+
+      <!-- Nameplate Scanner Button & Box -->
+      <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-xl space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+            <span>📷</span> สแกนรูปเนมเพลต (Nameplate)
+          </span>
+          <label class="cursor-pointer text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg font-bold transition shadow">
+            <span>เลือกรูป / ถ่ายรูป</span>
+            <input type="file" id="imageInput" accept="image/*" capture="environment" class="hidden" onchange="processNameplate(event)">
+          </label>
+        </div>
+
+        <!-- Progress Status -->
+        <div id="scanStatus" class="hidden text-[11px] text-yellow-400 bg-yellow-500/10 p-2 rounded-lg border border-yellow-500/20">
+          <div class="flex items-center justify-between mb-1">
+            <span id="scanStatusText">กำลังวิเคราะห์รูปภาพ...</span>
+            <span id="scanPercent">0%</span>
+          </div>
+          <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+            <div id="scanBar" class="bg-yellow-400 h-1.5 rounded-full w-0 transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <!-- Scan Result Preview -->
+        <div id="scanPreview" class="hidden text-[10px] text-slate-400 bg-slate-900 p-2 rounded border border-slate-800 max-h-20 overflow-y-auto leading-relaxed">
+        </div>
+      </div>
       
       <!-- Load Type Switch -->
       <div class="grid grid-cols-2 gap-2 text-xs">
@@ -166,7 +196,7 @@
         </div>
       </div>
 
-      <!-- Phase Selection (Fixed Radio Group Style) -->
+      <!-- Phase Selection -->
       <div>
         <label class="text-xs text-slate-200 block mb-1.5 font-medium">ระบบไฟฟ้า (Phase):</label>
         <div class="grid grid-cols-2 gap-2 text-xs">
@@ -252,7 +282,7 @@
         <div id="wireDetail" class="text-xs text-slate-400 mt-2">-</div>
       </div>
 
-      <!-- Parallel Run Recommendation (ทางเลือกเบิ้ลสาย) -->
+      <!-- Parallel Run Recommendation -->
       <div id="parallelBox" class="pt-3 border-t border-slate-800 hidden">
         <div class="text-xs text-yellow-400 font-semibold mb-1 flex items-center justify-center gap-1">
           <span>🔀</span> คำแนะนำทางเลือก: การเบิ้ลสาย (Parallel Runs)
@@ -291,7 +321,6 @@
       </h2>
 
       <div class="space-y-3 pt-1">
-        
         <!-- Item 1: Fliplink PDF -->
         <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700/80 space-y-3">
           <div class="text-sm font-bold text-slate-200">
@@ -342,6 +371,98 @@
         document.getElementById('buildingPlansPage').classList.remove('hidden');
       } else {
         document.getElementById('mainMenu').classList.remove('hidden');
+      }
+    }
+
+    // OCR Nameplate Scanner Function
+    async function processNameplate(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const statusBox = document.getElementById('scanStatus');
+      const statusText = document.getElementById('scanStatusText');
+      const statusPercent = document.getElementById('scanPercent');
+      const scanBar = document.getElementById('scanBar');
+      const previewBox = document.getElementById('scanPreview');
+
+      statusBox.classList.remove('hidden');
+      previewBox.classList.add('hidden');
+      statusText.innerText = "กำลังประมวลผลรูปภาพ...";
+      scanBar.style.width = "10%";
+
+      try {
+        const worker = await Tesseract.createWorker('eng');
+        
+        const ret = await worker.recognize(file);
+        const text = ret.data.text;
+        await worker.terminate();
+
+        statusPercent.innerText = "100%";
+        scanBar.style.width = "100%";
+        statusText.innerText = "สแกนสำเร็จ!";
+
+        previewBox.classList.remove('hidden');
+        previewBox.innerText = "ข้อความที่สแกนได้:\n" + text;
+
+        // Parse Electrical values from Text
+        parseElectricalData(text);
+
+      } catch (err) {
+        console.error(err);
+        statusText.innerText = "เกิดข้อผิดพลาดในการอ่านรูป";
+      }
+    }
+
+    function parseElectricalData(text) {
+      const cleanText = text.toUpperCase();
+
+      // Check Phase (3PH or 3 PHASE or 3 ~)
+      if (cleanText.includes('3PH') || cleanText.includes('3 PHASE') || cleanText.includes('3PHASE') || cleanText.includes('3~') || cleanText.includes('380V')) {
+        setPhase('3');
+      } else if (cleanText.includes('1PH') || cleanText.includes('1 PHASE') || cleanText.includes('220V')) {
+        setPhase('1');
+      }
+
+      // Check kW
+      const kwMatch = cleanText.match(/(\d+\.?\d*)\s*KW/);
+      if (kwMatch) {
+        document.getElementById('power').value = kwMatch[1];
+        document.getElementById('powerUnit').value = 'kW';
+        setLoadType('motor');
+        calculate();
+        return;
+      }
+
+      // Check HP
+      const hpMatch = cleanText.match(/(\d+\.?\d*)\s*HP/);
+      if (hpMatch) {
+        document.getElementById('power').value = hpMatch[1];
+        document.getElementById('powerUnit').value = 'HP';
+        setLoadType('motor');
+        calculate();
+        return;
+      }
+
+      // Check Watts (W)
+      const wMatch = cleanText.match(/(\d+\.?\d*)\s*W\b/);
+      if (wMatch) {
+        document.getElementById('power').value = wMatch[1];
+        document.getElementById('powerUnit').value = 'W';
+        calculate();
+        return;
+      }
+
+      // Check Ampere (A) if Power is missing
+      const ampMatch = cleanText.match(/(\d+\.?\d*)\s*A\b/);
+      if (ampMatch) {
+        const ampVal = parseFloat(ampMatch[1]);
+        const v = currentPhase === '1' ? 220 : 380;
+        const pfVal = parseFloat(document.getElementById('pf').value) || 0.85;
+        let watts = currentPhase === '1' ? (ampVal * v * pfVal) : (ampVal * Math.sqrt(3) * v * pfVal);
+        
+        document.getElementById('power').value = (watts / 1000).toFixed(2);
+        document.getElementById('powerUnit').value = 'kW';
+        calculate();
       }
     }
 
@@ -457,12 +578,11 @@
         document.getElementById('wireDetail').innerText = 'แนะนำให้ใช้ระบบเบิ้ลสายขนาน';
       }
 
-      // Parallel Run Calculation (แนะนำเบิ้ลสายเมื่อ CB >= 160A หรือสายเดี่ยวใหญ่เกิน 50 sq.mm)
+      // Parallel Run Calculation
       const parallelBox = document.getElementById('parallelBox');
       if (cbSize >= 160 || (selectedWire && parseFloat(selectedWire.size) >= 70)) {
         parallelBox.classList.remove('hidden');
 
-        // คำนวณเบิ้ล 2 เส้น (Parallel 2 Runs) - ใช้ Derating Factor 0.8 สำหรับสายขนาน
         const derating = 0.8;
         const requiredCapPerRun = (cbSize / 2) / derating;
         
@@ -473,7 +593,6 @@
           document.getElementById('parallelText').innerText = `2x (1x${parallelWire.size} ตร.มม.) / เฟส`;
           document.getElementById('parallelCap').innerText = `พิกัดทนกระแสรวม (คิดตัวคูณลด): ${totalCapacity} A`;
         } else {
-          // หาก 2 เส้นไม่พอ แนะนำ 3 เส้น
           const requiredCapPerRun3 = (cbSize / 3) / derating;
           let parallelWire3 = wireTable.find(w => w[method] >= requiredCapPerRun3);
           if (parallelWire3) {
